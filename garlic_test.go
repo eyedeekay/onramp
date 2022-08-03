@@ -8,21 +8,17 @@ import (
 	"net/http"
 	"testing"
 	"time"
-
-	"github.com/eyedeekay/sam3"
 )
 
-func TestGarlic(t *testing.T) {
-	fmt.Println("TestGarlic")
-	garlic, err := NewGarlic("test", "127.0.0.1:7656", sam3.Options_Small)
-	if err != nil {
-		t.Error(err)
-	}
+func TestBareGarlic(t *testing.T) {
+	fmt.Println("TestBareGarlic")
+	garlic := &Garlic{}
 	defer garlic.Close()
 	listener, err := garlic.Listen()
 	if err != nil {
 		t.Error(err)
 	}
+	log.Println("listener:", listener.Addr().String())
 	defer listener.Close()
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello, %q", r.URL.Path)
@@ -46,8 +42,8 @@ func TestGarlic(t *testing.T) {
 		t.Error(err)
 	}
 	fmt.Println(string(body))
-
 }
+
 func Serve(listener net.Listener) {
 	if err := http.Serve(listener, nil); err != nil {
 		log.Fatal(err)

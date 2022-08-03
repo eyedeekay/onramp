@@ -23,21 +23,25 @@ type Garlic struct {
 	opts []string
 }
 
-// NewGarlic returns a new Garlic struct. It is immediately ready to use with
-// I2P streaming.
-func NewGarlic(tunName, samAddr string, options []string) (*Garlic, error) {
-	g := new(Garlic)
-	var err error
-	g.name = tunName
-	g.addr = samAddr
-	g.opts = options
-	if g.SAM, err = g.samSession(); err != nil {
-		return nil, fmt.Errorf("onramp NewGarlic: %v", err)
+func (g *Garlic) getName() string {
+	if g.name == "" {
+		return "onramp"
 	}
-	if g.StreamSession, err = g.setupStreamSession(); err != nil {
-		return nil, fmt.Errorf("onramp NewGarlic: %v", err)
+	return g.name
+}
+
+func (g *Garlic) getAddr() string {
+	if g.addr == "" {
+		return "localhost:7656"
 	}
-	return g, nil
+	return g.addr
+}
+
+func (g *Garlic) getOptions() []string {
+	if g.opts == nil {
+		return sam3.Options_Default
+	}
+	return g.opts
 }
 
 func (g *Garlic) samSession() (*sam3.SAM, error) {
@@ -49,27 +53,6 @@ func (g *Garlic) samSession() (*sam3.SAM, error) {
 		}
 	}
 	return g.SAM, nil
-}
-
-func (g *Garlic) getName() string {
-	if g.name == "" {
-		return "onramp"
-	}
-	return g.name
-}
-
-func (g *Garlic) getAddr() string {
-	if g.addr == "" {
-		return "http://localhost:7656"
-	}
-	return g.addr
-}
-
-func (g *Garlic) getOptions() []string {
-	if g.opts == nil {
-		return sam3.Options_Default
-	}
-	return g.opts
 }
 
 func (g Garlic) setupStreamSession() (*sam3.StreamSession, error) {
@@ -92,6 +75,9 @@ func (g Garlic) setupStreamSession() (*sam3.StreamSession, error) {
 // Listen returns a net.Listener for the Garlic structure's I2P keys.
 func (g *Garlic) Listen() (net.Listener, error) {
 	var err error
+	if g.SAM, err = g.samSession(); err != nil {
+		return nil, fmt.Errorf("onramp NewGarlic: %v", err)
+	}
 	if g.StreamSession, err = g.setupStreamSession(); err != nil {
 		return nil, fmt.Errorf("onramp Listen: %v", err)
 	}
@@ -107,6 +93,9 @@ func (g *Garlic) Listen() (net.Listener, error) {
 // Dial returns a net.Conn for the Garlic structure's I2P keys.
 func (g *Garlic) Dial(net, addr string) (net.Conn, error) {
 	var err error
+	if g.SAM, err = g.samSession(); err != nil {
+		return nil, fmt.Errorf("onramp NewGarlic: %v", err)
+	}
 	if g.StreamSession, err = g.setupStreamSession(); err != nil {
 		return nil, fmt.Errorf("onramp Dial: %v", err)
 	}
@@ -135,6 +124,23 @@ func (g *Garlic) Keys() (i2pkeys.I2PKeys, error) {
 		return i2pkeys.I2PKeys{}, fmt.Errorf("onramp Keys: %v", err)
 	}
 	return keys, nil
+}
+
+// NewGarlic returns a new Garlic struct. It is immediately ready to use with
+// I2P streaming.
+func NewGarlic(tunName, samAddr string, options []string) (*Garlic, error) {
+	g := new(Garlic)
+	g.name = tunName
+	g.addr = samAddr
+	g.opts = options
+	var err error
+	if g.SAM, err = g.samSession(); err != nil {
+		return nil, fmt.Errorf("onramp NewGarlic: %v", err)
+	}
+	if g.StreamSession, err = g.setupStreamSession(); err != nil {
+		return nil, fmt.Errorf("onramp NewGarlic: %v", err)
+	}
+	return g, nil
 }
 
 // I2PKeys returns the I2PKeys at the keystore directory for the given
