@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 )
 
+// GetJoinedWD returns the working directory joined with the given path.
 func GetJoinedWD(dir string) (string, error) {
 	wd, err := os.Getwd()
 	if err != nil {
@@ -34,6 +35,9 @@ var I2P_KEYSTORE_PATH = i2pdefault
 // reference it by calling OnionKeystorePath() to check for errors
 var ONION_KEYSTORE_PATH = tordefault
 
+// I2PKeystorePath returns the path to the I2P Keystore. If the
+// path is not set, it returns the default path. If the path does
+// not exist, it creates it.
 func I2PKeystorePath() (string, error) {
 	if _, err := os.Stat(I2P_KEYSTORE_PATH); err != nil {
 		err := os.MkdirAll(I2P_KEYSTORE_PATH, 0755)
@@ -44,6 +48,9 @@ func I2PKeystorePath() (string, error) {
 	return I2P_KEYSTORE_PATH, nil
 }
 
+// TorKeystorePath returns the path to the Onion Keystore. If the
+// path is not set, it returns the default path. If the path does
+// not exist, it creates it.
 func TorKeystorePath() (string, error) {
 	if _, err := os.Stat(ONION_KEYSTORE_PATH); err != nil {
 		err := os.MkdirAll(ONION_KEYSTORE_PATH, 0755)
