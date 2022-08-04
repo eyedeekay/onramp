@@ -71,7 +71,7 @@ keystore + tunName.
 This is permanent and irreversible, and will change the onion service
 address.
 
-### func [DeleteI2PKeyStore](/common.go#L57)
+### func [DeleteI2PKeyStore](/common.go#L60)
 
 `func DeleteI2PKeyStore() error`
 
@@ -84,11 +84,19 @@ DeleteI2PKeyStore deletes the I2P Keystore.
 DeleteOnionKeys deletes the key file at the given path as determined by
 keystore + tunName.
 
-### func [DeleteTorKeyStore](/common.go#L75)
+### func [DeleteTorKeyStore](/common.go#L78)
 
 `func DeleteTorKeyStore() error`
 
 DeleteTorKeyStore deletes the Onion Keystore.
+
+### func [Dial](/common.go#L85)
+
+`func Dial(network, addr string) (net.Conn, error)`
+
+Dial returns a connection for the given network and address.
+network is ignored. If the address ends in i2p, it returns an I2P connection.
+if the address ends in anything else, it returns a Tor connection.
 
 ### func [DialGarlic](/garlic.go#L246)
 
@@ -106,7 +114,7 @@ DialOnion returns a net.Conn for a onion structure's keys
 corresponding to a structure managed by the onramp library
 and not instantiated by an app.
 
-### func [GetJoinedWD](/common.go#L14)
+### func [GetJoinedWD](/common.go#L17)
 
 `func GetJoinedWD(dir string) (string, error)`
 
@@ -119,13 +127,22 @@ GetJoinedWD returns the working directory joined with the given path.
 I2PKeys returns the I2PKeys at the keystore directory for the given
 tunnel name. If none exist, they are created and stored.
 
-### func [I2PKeystorePath](/common.go#L46)
+### func [I2PKeystorePath](/common.go#L49)
 
 `func I2PKeystorePath() (string, error)`
 
 I2PKeystorePath returns the path to the I2P Keystore. If the
 path is not set, it returns the default path. If the path does
 not exist, it creates it.
+
+### func [Listen](/common.go#L101)
+
+`func Listen(network, keys string) (net.Listener, error)`
+
+Listen returns a listener for the given network and address.
+if network is i2p or garlic, it returns an I2P listener.
+if network is tor or onion, it returns an Onion listener.
+if keys ends with ".i2p", it returns an I2P listener.
 
 ### func [ListenGarlic](/garlic.go#L234)
 
@@ -151,7 +168,7 @@ TorKeys returns a key pair which will be stored at the given key
 name in the key store. If the key already exists, it will be
 returned. If it does not exist, it will be generated.
 
-### func [TorKeystorePath](/common.go#L64)
+### func [TorKeystorePath](/common.go#L67)
 
 `func TorKeystorePath() (string, error)`
 

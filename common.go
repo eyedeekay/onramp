@@ -4,8 +4,11 @@
 package onramp
 
 import (
+	"net"
+	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 //go:generate go run -tags gen ./gen.go
@@ -74,4 +77,41 @@ func TorKeystorePath() (string, error) {
 // DeleteTorKeyStore deletes the Onion Keystore.
 func DeleteTorKeyStore() error {
 	return os.RemoveAll(ONION_KEYSTORE_PATH)
+}
+
+// Dial returns a connection for the given network and address.
+// network is ignored. If the address ends in i2p, it returns an I2P connection.
+// if the address ends in anything else, it returns a Tor connection.
+func Dial(network, addr string) (net.Conn, error) {
+	url, err := url.Parse(addr)
+	if err != nil {
+		return nil, err
+	}
+	hostname := url.Hostname()
+	if strings.HasSuffix(hostname, ".i2p") {
+		return DialGarlic(network, addr)
+	}
+	return DialOnion(network, addr)
+}
+
+// Listen returns a listener for the given network and address.
+// if network is i2p or garlic, it returns an I2P listener.
+// if network is tor or onion, it returns an Onion listener.
+// if keys ends with ".i2p", it returns an I2P listener.
+func Listen(network, keys string) (net.Listener, error) {
+	if network == "i2p" || network == "garlic" {
+		return ListenGarlic(network, keys)
+	}
+	if network == "tor" || network == "onion" {
+		return ListenOnion(network, keys)
+	}
+	url, err := url.Parse(keys)
+	if err != nil {
+		return nil, err
+	}
+	hostname := url.Hostname()
+	if strings.HasSuffix(hostname, ".i2p") {
+		return ListenGarlic(network, keys)
+	}
+	return ListenOnion(network, keys)
 }
