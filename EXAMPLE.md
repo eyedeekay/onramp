@@ -6,16 +6,16 @@ Example Usage
 ```Go
 package main
 
-import(
-    "fmt"
-    "log"
-    "net/http"
+import (
+	"fmt"
+	"log"
+	"net/http"
 
-    "github.com/eyedeekay/onramp"
+	"github.com/eyedeekay/onramp"
 )
 
 func main() {
-    garlic := &onramp.Garlic{}
+	garlic := &onramp.Garlic{}
 	defer garlic.Close()
 	listener, err := garlic.Listen()
 	if err != nil {
@@ -25,7 +25,7 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello, %q", r.URL.Path)
 	})
-    if err := http.Serve(listener, nil); err != nil {
+	if err := http.Serve(listener, nil); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -36,17 +36,17 @@ func main() {
 ```Go
 package main
 
-import(
-    "fmt"
-    "io/ioutil"
-    "log"
-    "net/http"
+import (
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
 
-    "github.com/eyedeekay/onramp"
+	"github.com/eyedeekay/onramp"
 )
 
 func main() {
-    garlic := &onramp.Garlic{}
+	garlic := &onramp.Garlic{}
 	defer garlic.Close()
 	transport := http.Transport{
 		Dial: garlic.Dial,
@@ -66,6 +66,7 @@ func main() {
 	}
 	fmt.Println(string(body))
 }
+
 ```
 
 ### Usage as instance of a struct, Listener and Dialer on same address
@@ -118,7 +119,6 @@ func Serve(listener net.Listener) {
 		log.Fatal(err)
 	}
 }
-
 ```
 
 ### Usage as automatically-managed Listeners
@@ -126,17 +126,17 @@ func Serve(listener net.Listener) {
 ```Go
 package main
 
-import(
-    "fmt"
-    "log"
-    "net/http"
+import (
+	"fmt"
+	"log"
+	"net/http"
 
-    "github.com/eyedeekay/onramp"
+	"github.com/eyedeekay/onramp"
 )
 
 func main() {
-    defer onramp.CloseAll()
-    listener, err := onramp.Listen("tcp", "service.i2p")
+	defer onramp.CloseAll()
+	listener, err := onramp.Listen("tcp", "service.i2p")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -144,10 +144,11 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello, %q", r.URL.Path)
 	})
-    if err := http.Serve(listener, nil); err != nil {
+	if err := http.Serve(listener, nil); err != nil {
 		log.Fatal(err)
 	}
 }
+
 ```
 
 ### Usage as automatically-managed Dialers
@@ -155,20 +156,21 @@ func main() {
 ```Go
 package main
 
-import(
-    "fmt"
-    "log"
-    "net/http"
+import (
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
 
-    "github.com/eyedeekay/onramp"
+	"github.com/eyedeekay/onramp"
 )
 
 func main() {
-    defer onramp.CloseAll()
-    transport := http.Transport {
-        Dial: onramp.Dial,
-    }
-    client := &http.Client{
+	defer onramp.CloseAll()
+	transport := http.Transport{
+		Dial: onramp.Dial,
+	}
+	client := &http.Client{
 		Transport: &transport,
 	}
 	resp, err := client.Get("http://" + listener.Addr().String() + "/")
@@ -181,6 +183,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(string(body))    
+	fmt.Println(string(body))
 }
+
 ```

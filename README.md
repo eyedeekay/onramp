@@ -30,14 +30,14 @@ struct.
 ```Go
 package main
 
-import(
-    "log"
+import (
+	"log"
 
-    "github.com/eyedeekay/onramp"
+	"github.com/eyedeekay/onramp"
 )
 
 func main() {
-    garlic := &onramp.Garlic{}
+	garlic := &onramp.Garlic{}
 	defer garlic.Close()
 	listener, err := garlic.Listen()
 	if err != nil {
@@ -55,14 +55,14 @@ struct.
 ```Go
 package main
 
-import(
-    "log"
+import (
+	"log"
 
-    "github.com/eyedeekay/onramp"
+	"github.com/eyedeekay/onramp"
 )
 
 func main() {
-    onion := &onramp.Onion{}
+	onion := &onramp.Onion{}
 	defer garlic.Close()
 	listener, err := onion.Listen()
 	if err != nil {
