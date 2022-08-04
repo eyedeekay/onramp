@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-// go:generate go run -tags gen ./gen.go
+//go:generate go run -tags gen ./gen.go
 
 // GetJoinedWD returns the working directory joined with the given path.
 func GetJoinedWD(dir string) (string, error) {
