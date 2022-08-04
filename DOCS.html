@@ -80,7 +80,7 @@
     </h2>
     <h3>
       func
-      <a href="/garlic.go#L209" rel="nofollow">
+      <a href="/garlic.go#L211" rel="nofollow">
         CloseAllGarlic
       </a>
     </h3>
@@ -95,7 +95,7 @@
     </p>
     <h3>
       func
-      <a href="/onion.go#L155" rel="nofollow">
+      <a href="/onion.go#L174" rel="nofollow">
         CloseAllOnion
       </a>
     </h3>
@@ -105,12 +105,12 @@
       </code>
     </p>
     <p>
-      CloseAllOnion closes all garlics managed by the onramp package. It does not
+      CloseAllOnion closes all onions managed by the onramp package. It does not
       affect objects instantiated by an app.
     </p>
     <h3>
       func
-      <a href="/garlic.go#L218" rel="nofollow">
+      <a href="/garlic.go#L220" rel="nofollow">
         CloseGarlic
       </a>
     </h3>
@@ -125,7 +125,7 @@
     </p>
     <h3>
       func
-      <a href="/onion.go#L164" rel="nofollow">
+      <a href="/onion.go#L183" rel="nofollow">
         CloseOnion
       </a>
     </h3>
@@ -137,6 +137,23 @@
     <p>
       CloseOnion closes the Onion at the given index. It does not affect Onion
       objects instantiated by an app.
+    </p>
+    <h3>
+      func
+      <a href="/garlic.go#L159" rel="nofollow">
+        DeleteGarlicKeys
+      </a>
+    </h3>
+    <p>
+      <code>
+        func DeleteGarlicKeys(tunName string) error
+      </code>
+    </p>
+    <p>
+      DeleteGarlicKeys deletes the key file at the given path as determined by
+      keystore + tunName.
+      This is permanent and irreversible, and will change the onion service
+      address.
     </p>
     <h3>
       func
@@ -154,17 +171,17 @@
     </p>
     <h3>
       func
-      <a href="/garlic.go#L157" rel="nofollow">
-        DeleteKeys
+      <a href="/onion.go#L216" rel="nofollow">
+        DeleteOnionKeys
       </a>
     </h3>
     <p>
       <code>
-        func DeleteKeys(tunName string) error
+        func DeleteOnionKeys(tunName string) error
       </code>
     </p>
     <p>
-      DeleteKeys deletes the key file at the given path as determined by
+      DeleteOnionKeys deletes the key file at the given path as determined by
       keystore + tunName.
     </p>
     <h3>
@@ -183,7 +200,7 @@
     </p>
     <h3>
       func
-      <a href="/garlic.go#L244" rel="nofollow">
+      <a href="/garlic.go#L246" rel="nofollow">
         DialGarlic
       </a>
     </h3>
@@ -199,7 +216,7 @@
     </p>
     <h3>
       func
-      <a href="/onion.go#L186" rel="nofollow">
+      <a href="/onion.go#L205" rel="nofollow">
         DialOnion
       </a>
     </h3>
@@ -209,7 +226,7 @@
       </code>
     </p>
     <p>
-      DialOnion returns a net.Conn for a garlic structure’s keys
+      DialOnion returns a net.Conn for a onion structure’s keys
       corresponding to a structure managed by the onramp library
       and not instantiated by an app.
     </p>
@@ -229,7 +246,7 @@
     </p>
     <h3>
       func
-      <a href="/garlic.go#L171" rel="nofollow">
+      <a href="/garlic.go#L173" rel="nofollow">
         I2PKeys
       </a>
     </h3>
@@ -260,7 +277,7 @@
     </p>
     <h3>
       func
-      <a href="/garlic.go#L232" rel="nofollow">
+      <a href="/garlic.go#L234" rel="nofollow">
         ListenGarlic
       </a>
     </h3>
@@ -276,7 +293,7 @@
     </p>
     <h3>
       func
-      <a href="/onion.go#L174" rel="nofollow">
+      <a href="/onion.go#L193" rel="nofollow">
         ListenOnion
       </a>
     </h3>
@@ -286,13 +303,13 @@
       </code>
     </p>
     <p>
-      ListenOnion returns a net.Listener for a garlic structure’s keys
+      ListenOnion returns a net.Listener for a onion structure’s keys
       corresponding to a structure managed by the onramp library
       and not instantiated by an app.
     </p>
     <h3>
       func
-      <a href="/onion.go#L116" rel="nofollow">
+      <a href="/onion.go#L135" rel="nofollow">
         TorKeys
       </a>
     </h3>
@@ -300,6 +317,11 @@
       <code>
         func TorKeys(keyName string) (ed25519.KeyPair, error)
       </code>
+    </p>
+    <p>
+      TorKeys returns a key pair which will be stored at the given key
+      name in the key store. If the key already exists, it will be
+      returned. If it does not exist, it will be generated.
     </p>
     <h3>
       func
@@ -420,7 +442,7 @@
     </p>
     <h3>
       type
-      <a href="/onion.go#L21" rel="nofollow">
+      <a href="/onion.go#L24" rel="nofollow">
         Onion
       </a>
     </h3>
@@ -429,9 +451,14 @@
         type Onion struct { ... }
       </code>
     </p>
+    <p>
+      Onion represents a structure which manages an onion service and
+      a Tor client. The onion service will automatically have persistent
+      keys.
+    </p>
     <h4>
       func
-      <a href="/onion.go#L110" rel="nofollow">
+      <a href="/onion.go#L126" rel="nofollow">
         NewOnion
       </a>
     </h4>
@@ -440,9 +467,12 @@
         func NewOnion(name string) (*Onion, error)
       </code>
     </p>
+    <p>
+      NewOnion returns a new Onion object.
+    </p>
     <h4>
       func (*Onion)
-      <a href="/onion.go#L102" rel="nofollow">
+      <a href="/onion.go#L109" rel="nofollow">
         Close
       </a>
     </h4>
@@ -451,9 +481,28 @@
         func (o *Onion) Close() error
       </code>
     </p>
+    <p>
+      Close closes the Onion Service and all associated resources.
+    </p>
     <h4>
       func (*Onion)
-      <a href="/onion.go#L98" rel="nofollow">
+      <a href="/onion.go#L121" rel="nofollow">
+        DeleteKeys
+      </a>
+    </h4>
+    <p>
+      <code>
+        func (g *Onion) DeleteKeys() error
+      </code>
+    </p>
+    <p>
+      DeleteKeys deletes the keys at the given key name in the key store.
+      This is permanent and irreversible, and will change the onion service
+      address.
+    </p>
+    <h4>
+      func (*Onion)
+      <a href="/onion.go#L104" rel="nofollow">
         Dial
       </a>
     </h4>
@@ -462,9 +511,12 @@
         func (o *Onion) Dial(net, addr string) (net.Conn, error)
       </code>
     </p>
+    <p>
+      Dial returns a net.Conn to the given onion address or clearnet address.
+    </p>
     <h4>
       func (*Onion)
-      <a href="/onion.go#L106" rel="nofollow">
+      <a href="/onion.go#L114" rel="nofollow">
         Keys
       </a>
     </h4>
@@ -473,9 +525,12 @@
         func (o *Onion) Keys() (ed25519.KeyPair, error)
       </code>
     </p>
+    <p>
+      Keys returns the keys for the Onion
+    </p>
     <h4>
       func (*Onion)
-      <a href="/onion.go#L94" rel="nofollow">
+      <a href="/onion.go#L99" rel="nofollow">
         Listen
       </a>
     </h4>
@@ -483,6 +538,10 @@
       <code>
         func (o *Onion) Listen() (net.Listener, error)
       </code>
+    </p>
+    <p>
+      ListenOnion returns a net.Listener which will listen on an onion
+      address, and will automatically generate a keypair and store it.
     </p>
     <hr/>
     <p>
