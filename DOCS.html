@@ -80,33 +80,63 @@
     </h2>
     <h3>
       func
-      <a href="/garlic.go#L218" rel="nofollow">
-        Close
+      <a href="/garlic.go#L209" rel="nofollow">
+        CloseAllGarlic
       </a>
     </h3>
     <p>
       <code>
-        func Close(tunName string)
+        func CloseAllGarlic()
       </code>
     </p>
     <p>
-      Close closes the Garlic at the given index. It does not affect Garlic
+      CloseAllGarlic closes all garlics managed by the onramp package. It does not
+      affect objects instantiated by an app.
+    </p>
+    <h3>
+      func
+      <a href="/onion.go#L155" rel="nofollow">
+        CloseAllOnion
+      </a>
+    </h3>
+    <p>
+      <code>
+        func CloseAllOnion()
+      </code>
+    </p>
+    <p>
+      CloseAllOnion closes all garlics managed by the onramp package. It does not
+      affect objects instantiated by an app.
+    </p>
+    <h3>
+      func
+      <a href="/garlic.go#L218" rel="nofollow">
+        CloseGarlic
+      </a>
+    </h3>
+    <p>
+      <code>
+        func CloseGarlic(tunName string)
+      </code>
+    </p>
+    <p>
+      CloseGarlic closes the Garlic at the given index. It does not affect Garlic
       objects instantiated by an app.
     </p>
     <h3>
       func
-      <a href="/garlic.go#L209" rel="nofollow">
-        CloseAll
+      <a href="/onion.go#L164" rel="nofollow">
+        CloseOnion
       </a>
     </h3>
     <p>
       <code>
-        func CloseAll()
+        func CloseOnion(tunName string)
       </code>
     </p>
     <p>
-      Close() closes all garlics managed by the onramp package. It does not
-      affect objects instantiated by an app.
+      CloseOnion closes the Onion at the given index. It does not affect Onion
+      objects instantiated by an app.
     </p>
     <h3>
       func
@@ -154,16 +184,32 @@
     <h3>
       func
       <a href="/garlic.go#L244" rel="nofollow">
-        Dial
+        DialGarlic
       </a>
     </h3>
     <p>
       <code>
-        func Dial(network, addr string) (net.Conn, error)
+        func DialGarlic(network, addr string) (net.Conn, error)
       </code>
     </p>
     <p>
-      Dial returns a net.Conn for a garlic structure’s keys
+      DialGarlic returns a net.Conn for a garlic structure’s keys
+      corresponding to a structure managed by the onramp library
+      and not instantiated by an app.
+    </p>
+    <h3>
+      func
+      <a href="/onion.go#L186" rel="nofollow">
+        DialOnion
+      </a>
+    </h3>
+    <p>
+      <code>
+        func DialOnion(network, addr string) (net.Conn, error)
+      </code>
+    </p>
+    <p>
+      DialOnion returns a net.Conn for a garlic structure’s keys
       corresponding to a structure managed by the onramp library
       and not instantiated by an app.
     </p>
@@ -215,18 +261,45 @@
     <h3>
       func
       <a href="/garlic.go#L232" rel="nofollow">
-        Listen
+        ListenGarlic
       </a>
     </h3>
     <p>
       <code>
-        func Listen(network, keys string) (net.Listener, error)
+        func ListenGarlic(network, keys string) (net.Listener, error)
       </code>
     </p>
     <p>
-      Listen returns a net.Listener for a garlic structure’s keys
+      ListenGarlic returns a net.Listener for a garlic structure’s keys
       corresponding to a structure managed by the onramp library
       and not instantiated by an app.
+    </p>
+    <h3>
+      func
+      <a href="/onion.go#L174" rel="nofollow">
+        ListenOnion
+      </a>
+    </h3>
+    <p>
+      <code>
+        func ListenOnion(network, keys string) (net.Listener, error)
+      </code>
+    </p>
+    <p>
+      ListenOnion returns a net.Listener for a garlic structure’s keys
+      corresponding to a structure managed by the onramp library
+      and not instantiated by an app.
+    </p>
+    <h3>
+      func
+      <a href="/onion.go#L116" rel="nofollow">
+        TorKeys
+      </a>
+    </h3>
+    <p>
+      <code>
+        func TorKeys(keyName string) (ed25519.KeyPair, error)
+      </code>
     </p>
     <h3>
       func
@@ -347,13 +420,68 @@
     </p>
     <h3>
       type
-      <a href="/onion.go#L8" rel="nofollow">
+      <a href="/onion.go#L21" rel="nofollow">
         Onion
       </a>
     </h3>
     <p>
       <code>
         type Onion struct { ... }
+      </code>
+    </p>
+    <h4>
+      func
+      <a href="/onion.go#L110" rel="nofollow">
+        NewOnion
+      </a>
+    </h4>
+    <p>
+      <code>
+        func NewOnion(name string) (*Onion, error)
+      </code>
+    </p>
+    <h4>
+      func (*Onion)
+      <a href="/onion.go#L102" rel="nofollow">
+        Close
+      </a>
+    </h4>
+    <p>
+      <code>
+        func (o *Onion) Close() error
+      </code>
+    </p>
+    <h4>
+      func (*Onion)
+      <a href="/onion.go#L98" rel="nofollow">
+        Dial
+      </a>
+    </h4>
+    <p>
+      <code>
+        func (o *Onion) Dial(net, addr string) (net.Conn, error)
+      </code>
+    </p>
+    <h4>
+      func (*Onion)
+      <a href="/onion.go#L106" rel="nofollow">
+        Keys
+      </a>
+    </h4>
+    <p>
+      <code>
+        func (o *Onion) Keys() (ed25519.KeyPair, error)
+      </code>
+    </p>
+    <h4>
+      func (*Onion)
+      <a href="/onion.go#L94" rel="nofollow">
+        Listen
+      </a>
+    </h4>
+    <p>
+      <code>
+        func (o *Onion) Listen() (net.Listener, error)
       </code>
     </p>
     <hr/>
