@@ -11,7 +11,7 @@ maintained between usages of the same application in the same configuration.
 This means that hidden services will maintain their identities, and that clients
 will always have the same return addresses. If you don't want this behavior,
 make sure to delete the "keystore" when your app closes or when your application
-needs to cycle keys by calling the `Garlic.DeleteKeys()` or `Onion.DeleteKeys()
+needs to cycle keys by calling the `Garlic.DeleteKeys()` or `Onion.DeleteKeys()`
 function. For more information, check out the [godoc](http://pkg.go.dev/github.com/eyedeekay/onramp).
 
 - **[Source Code](https://github.com/eyedeekay/onramp)**
