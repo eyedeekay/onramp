@@ -92,14 +92,14 @@
     </p>
     <pre><code>package main
 
-import(
-    &#34;log&#34;
+import (
+	&#34;log&#34;
 
-    &#34;github.com/eyedeekay/onramp&#34;
+	&#34;github.com/eyedeekay/onramp&#34;
 )
 
 func main() {
-    garlic := &amp;onramp.Garlic{}
+	garlic := &amp;onramp.Garlic{}
 	defer garlic.Close()
 	listener, err := garlic.Listen()
 	if err != nil {
@@ -120,14 +120,14 @@ func main() {
     </p>
     <pre><code>package main
 
-import(
-    &#34;log&#34;
+import (
+	&#34;log&#34;
 
-    &#34;github.com/eyedeekay/onramp&#34;
+	&#34;github.com/eyedeekay/onramp&#34;
 )
 
 func main() {
-    onion := &amp;onramp.Onion{}
+	onion := &amp;onramp.Onion{}
 	defer garlic.Close()
 	listener, err := onion.Listen()
 	if err != nil {
