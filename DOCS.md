@@ -34,33 +34,42 @@ var SAM_ADDR = "127.0.0.1:7656"
 
 ## Functions
 
-### func [CloseAllGarlic](/garlic.go#L209)
+### func [CloseAllGarlic](/garlic.go#L211)
 
 `func CloseAllGarlic()`
 
 CloseAllGarlic closes all garlics managed by the onramp package. It does not
 affect objects instantiated by an app.
 
-### func [CloseAllOnion](/onion.go#L155)
+### func [CloseAllOnion](/onion.go#L174)
 
 `func CloseAllOnion()`
 
-CloseAllOnion closes all garlics managed by the onramp package. It does not
+CloseAllOnion closes all onions managed by the onramp package. It does not
 affect objects instantiated by an app.
 
-### func [CloseGarlic](/garlic.go#L218)
+### func [CloseGarlic](/garlic.go#L220)
 
 `func CloseGarlic(tunName string)`
 
 CloseGarlic closes the Garlic at the given index. It does not affect Garlic
 objects instantiated by an app.
 
-### func [CloseOnion](/onion.go#L164)
+### func [CloseOnion](/onion.go#L183)
 
 `func CloseOnion(tunName string)`
 
 CloseOnion closes the Onion at the given index. It does not affect Onion
 objects instantiated by an app.
+
+### func [DeleteGarlicKeys](/garlic.go#L159)
+
+`func DeleteGarlicKeys(tunName string) error`
+
+DeleteGarlicKeys deletes the key file at the given path as determined by
+keystore + tunName.
+This is permanent and irreversible, and will change the onion service
+address.
 
 ### func [DeleteI2PKeyStore](/common.go#L57)
 
@@ -68,11 +77,11 @@ objects instantiated by an app.
 
 DeleteI2PKeyStore deletes the I2P Keystore.
 
-### func [DeleteKeys](/garlic.go#L157)
+### func [DeleteOnionKeys](/onion.go#L216)
 
-`func DeleteKeys(tunName string) error`
+`func DeleteOnionKeys(tunName string) error`
 
-DeleteKeys deletes the key file at the given path as determined by
+DeleteOnionKeys deletes the key file at the given path as determined by
 keystore + tunName.
 
 ### func [DeleteTorKeyStore](/common.go#L75)
@@ -81,7 +90,7 @@ keystore + tunName.
 
 DeleteTorKeyStore deletes the Onion Keystore.
 
-### func [DialGarlic](/garlic.go#L244)
+### func [DialGarlic](/garlic.go#L246)
 
 `func DialGarlic(network, addr string) (net.Conn, error)`
 
@@ -89,11 +98,11 @@ DialGarlic returns a net.Conn for a garlic structure's keys
 corresponding to a structure managed by the onramp library
 and not instantiated by an app.
 
-### func [DialOnion](/onion.go#L186)
+### func [DialOnion](/onion.go#L205)
 
 `func DialOnion(network, addr string) (net.Conn, error)`
 
-DialOnion returns a net.Conn for a garlic structure's keys
+DialOnion returns a net.Conn for a onion structure's keys
 corresponding to a structure managed by the onramp library
 and not instantiated by an app.
 
@@ -103,7 +112,7 @@ and not instantiated by an app.
 
 GetJoinedWD returns the working directory joined with the given path.
 
-### func [I2PKeys](/garlic.go#L171)
+### func [I2PKeys](/garlic.go#L173)
 
 `func I2PKeys(tunName, samAddr string) (i2pkeys.I2PKeys, error)`
 
@@ -118,7 +127,7 @@ I2PKeystorePath returns the path to the I2P Keystore. If the
 path is not set, it returns the default path. If the path does
 not exist, it creates it.
 
-### func [ListenGarlic](/garlic.go#L232)
+### func [ListenGarlic](/garlic.go#L234)
 
 `func ListenGarlic(network, keys string) (net.Listener, error)`
 
@@ -126,17 +135,21 @@ ListenGarlic returns a net.Listener for a garlic structure's keys
 corresponding to a structure managed by the onramp library
 and not instantiated by an app.
 
-### func [ListenOnion](/onion.go#L174)
+### func [ListenOnion](/onion.go#L193)
 
 `func ListenOnion(network, keys string) (net.Listener, error)`
 
-ListenOnion returns a net.Listener for a garlic structure's keys
+ListenOnion returns a net.Listener for a onion structure's keys
 corresponding to a structure managed by the onramp library
 and not instantiated by an app.
 
-### func [TorKeys](/onion.go#L116)
+### func [TorKeys](/onion.go#L135)
 
 `func TorKeys(keyName string) (ed25519.KeyPair, error)`
+
+TorKeys returns a key pair which will be stored at the given key
+name in the key store. If the key already exists, it will be
+returned. If it does not exist, it will be generated.
 
 ### func [TorKeystorePath](/common.go#L64)
 
@@ -191,29 +204,52 @@ exist, they are created and stored.
 
 Listen returns a net.Listener for the Garlic structure's I2P keys.
 
-### type [Onion](/onion.go#L21)
+### type [Onion](/onion.go#L24)
 
 `type Onion struct { ... }`
 
-#### func [NewOnion](/onion.go#L110)
+Onion represents a structure which manages an onion service and
+a Tor client. The onion service will automatically have persistent
+keys.
+
+#### func [NewOnion](/onion.go#L126)
 
 `func NewOnion(name string) (*Onion, error)`
 
-#### func (*Onion) [Close](/onion.go#L102)
+NewOnion returns a new Onion object.
+
+#### func (*Onion) [Close](/onion.go#L109)
 
 `func (o *Onion) Close() error`
 
-#### func (*Onion) [Dial](/onion.go#L98)
+Close closes the Onion Service and all associated resources.
+
+#### func (*Onion) [DeleteKeys](/onion.go#L121)
+
+`func (g *Onion) DeleteKeys() error`
+
+DeleteKeys deletes the keys at the given key name in the key store.
+This is permanent and irreversible, and will change the onion service
+address.
+
+#### func (*Onion) [Dial](/onion.go#L104)
 
 `func (o *Onion) Dial(net, addr string) (net.Conn, error)`
 
-#### func (*Onion) [Keys](/onion.go#L106)
+Dial returns a net.Conn to the given onion address or clearnet address.
+
+#### func (*Onion) [Keys](/onion.go#L114)
 
 `func (o *Onion) Keys() (ed25519.KeyPair, error)`
 
-#### func (*Onion) [Listen](/onion.go#L94)
+Keys returns the keys for the Onion
+
+#### func (*Onion) [Listen](/onion.go#L99)
 
 `func (o *Onion) Listen() (net.Listener, error)`
+
+ListenOnion returns a net.Listener which will listen on an onion
+address, and will automatically generate a keypair and store it.
 
 ---
 Readme created from Go doc with [goreadme](https://github.com/posener/goreadme)

@@ -18,6 +18,9 @@ import (
 
 var torp *tor.Tor
 
+// Onion represents a structure which manages an onion service and
+// a Tor client. The onion service will automatically have persistent
+// keys.
 type Onion struct {
 	*tor.StartConf
 	*tor.ListenConf
@@ -91,32 +94,48 @@ func (o *Onion) getName() string {
 	return o.name
 }
 
+// ListenOnion returns a net.Listener which will listen on an onion
+// address, and will automatically generate a keypair and store it.
 func (o *Onion) Listen() (net.Listener, error) {
 	return o.getTor().Listen(o.getContext(), o.getListenConf())
 }
 
+// Dial returns a net.Conn to the given onion address or clearnet address.
 func (o *Onion) Dial(net, addr string) (net.Conn, error) {
 	return o.getDialer().DialContext(o.getContext(), net, addr)
 }
 
+// Close closes the Onion Service and all associated resources.
 func (o *Onion) Close() error {
 	return o.getTor().Close()
 }
 
+// Keys returns the keys for the Onion
 func (o *Onion) Keys() (ed25519.KeyPair, error) {
 	return TorKeys(o.getName())
 }
 
+// DeleteKeys deletes the keys at the given key name in the key store.
+// This is permanent and irreversible, and will change the onion service
+// address.
+func (g *Onion) DeleteKeys() error {
+	return DeleteOnionKeys(g.getName())
+}
+
+// NewOnion returns a new Onion object.
 func NewOnion(name string) (*Onion, error) {
 	return &Onion{
 		name: name,
 	}, nil
 }
 
+// TorKeys returns a key pair which will be stored at the given key
+// name in the key store. If the key already exists, it will be
+// returned. If it does not exist, it will be generated.
 func TorKeys(keyName string) (ed25519.KeyPair, error) {
 	keystore, err := TorKeystorePath()
 	if err != nil {
-		return nil, fmt.Errorf("onramp I2PKeys: discovery error %v", err)
+		return nil, fmt.Errorf("onramp OnionKeys: discovery error %v", err)
 	}
 	var keys ed25519.KeyPair
 	keysPath := filepath.Join(keystore, keyName+".tor.private")
@@ -150,11 +169,11 @@ func TorKeys(keyName string) (ed25519.KeyPair, error) {
 
 var onions map[string]*Onion
 
-// CloseAllOnion closes all garlics managed by the onramp package. It does not
+// CloseAllOnion closes all onions managed by the onramp package. It does not
 // affect objects instantiated by an app.
 func CloseAllOnion() {
-	for i, g := range garlics {
-		log.Println("Closing garlic", g.name)
+	for i, g := range onions {
+		log.Println("Closing onion", g.name)
 		CloseOnion(i)
 	}
 }
@@ -162,13 +181,13 @@ func CloseAllOnion() {
 // CloseOnion closes the Onion at the given index. It does not affect Onion
 // objects instantiated by an app.
 func CloseOnion(tunName string) {
-	g, ok := garlics[tunName]
+	g, ok := onions[tunName]
 	if ok {
 		g.Close()
 	}
 }
 
-// ListenOnion returns a net.Listener for a garlic structure's keys
+// ListenOnion returns a net.Listener for a onion structure's keys
 // corresponding to a structure managed by the onramp library
 // and not instantiated by an app.
 func ListenOnion(network, keys string) (net.Listener, error) {
@@ -180,7 +199,7 @@ func ListenOnion(network, keys string) (net.Listener, error) {
 	return g.Listen()
 }
 
-// DialOnion returns a net.Conn for a garlic structure's keys
+// DialOnion returns a net.Conn for a onion structure's keys
 // corresponding to a structure managed by the onramp library
 // and not instantiated by an app.
 func DialOnion(network, addr string) (net.Conn, error) {
@@ -190,4 +209,18 @@ func DialOnion(network, addr string) (net.Conn, error) {
 	}
 	onions[addr] = g
 	return g.Dial(network, addr)
+}
+
+// DeleteOnionKeys deletes the key file at the given path as determined by
+// keystore + tunName.
+func DeleteOnionKeys(tunName string) error {
+	keystore, err := TorKeystorePath()
+	if err != nil {
+		return fmt.Errorf("onramp DeleteOnionKeys: discovery error %v", err)
+	}
+	keyspath := filepath.Join(keystore, tunName+".i2p.private")
+	if err := os.Remove(keyspath); err != nil {
+		return fmt.Errorf("onramp DeleteOnionKeys: %v", err)
+	}
+	return nil
 }

@@ -132,7 +132,7 @@ func (g *Garlic) Keys() (i2pkeys.I2PKeys, error) {
 }
 
 func (g *Garlic) DeleteKeys() error {
-	return DeleteKeys(g.getName())
+	return DeleteGarlicKeys(g.getName())
 }
 
 // NewGarlic returns a new Garlic struct. It is immediately ready to use with
@@ -152,16 +152,18 @@ func NewGarlic(tunName, samAddr string, options []string) (*Garlic, error) {
 	return g, nil
 }
 
-// DeleteKeys deletes the key file at the given path as determined by
+// DeleteGarlicKeys deletes the key file at the given path as determined by
 // keystore + tunName.
-func DeleteKeys(tunName string) error {
+// This is permanent and irreversible, and will change the onion service
+// address.
+func DeleteGarlicKeys(tunName string) error {
 	keystore, err := I2PKeystorePath()
 	if err != nil {
-		return fmt.Errorf("onramp DeleteKeys: discovery error %v", err)
+		return fmt.Errorf("onramp DeleteGarlicKeys: discovery error %v", err)
 	}
 	keyspath := filepath.Join(keystore, tunName+".i2p.private")
 	if err := os.Remove(keyspath); err != nil {
-		return fmt.Errorf("onramp DeleteKeys: %v", err)
+		return fmt.Errorf("onramp DeleteGarlicKeys: %v", err)
 	}
 	return nil
 }
