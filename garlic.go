@@ -23,6 +23,8 @@ type Garlic struct {
 	opts []string
 }
 
+var OPT_DEFAULTS = sam3.Options_Default
+
 func (g *Garlic) getName() string {
 	if g.name == "" {
 		return "onramp"
@@ -39,7 +41,7 @@ func (g *Garlic) getAddr() string {
 
 func (g *Garlic) getOptions() []string {
 	if g.opts == nil {
-		return sam3.Options_Default
+		return OPT_DEFAULTS
 	}
 	return g.opts
 }
@@ -177,4 +179,48 @@ func I2PKeys(tunName, samAddr string) (i2pkeys.I2PKeys, error) {
 		}
 		return keys, nil
 	}
+}
+
+var garlics map[string]*Garlic
+
+// Close() closes all garlics managed by the onramp package. It does not
+// affect objects instantiated by an app.
+func CloseAll() {
+	for i, g := range garlics {
+		log.Println("Closing garlic", g.name)
+		Close(i)
+	}
+}
+
+// Close closes the Garlic at the given index. It does not affect Garlic
+// objects instantiated by an app.
+func Close(tunName string) {
+	g, ok := garlics[tunName]
+	if ok {
+		g.Close()
+	}
+}
+
+// Listen returns a net.Listener for a garlic structure's keys
+// corresponding to a structure managed by the onramp library
+// and not instantiated by an app.
+func Listen(network, keys string) (net.Listener, error) {
+	g, err := NewGarlic(network, keys, OPT_DEFAULTS)
+	if err != nil {
+		return nil, fmt.Errorf("onramp Listen: %v", err)
+	}
+	garlics[keys] = g
+	return g.Listen()
+}
+
+// Dial returns a net.Conn for a garlic structure's keys
+// corresponding to a structure managed by the onramp library
+// and not instantiated by an app.
+func Dial(network, addr string) (net.Conn, error) {
+	g, err := NewGarlic(network, addr, OPT_DEFAULTS)
+	if err != nil {
+		return nil, fmt.Errorf("onramp Dial: %v", err)
+	}
+	garlics[addr] = g
+	return g.Dial(network, addr)
 }
