@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	cmd := exec.Command("goreadme", "-badge-godoc", "-badge-goreportcard", "-title", "Onramp I2P and Tor Library", "-factories", "-methods", "-variabless")
+	cmd := exec.Command("goreadme", "-badge-godoc", "-badge-goreportcard", "-title", "Onramp I2P and Tor Library", "-factories", "-methods", "-functions", "-types", "-variabless")
 	file, err := os.Create("DOCS.md")
 	if err != nil {
 		log.Fatal(err)
