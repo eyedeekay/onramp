@@ -80,7 +80,7 @@
     </h2>
     <h3>
       func
-      <a href="/garlic.go#L200" rel="nofollow">
+      <a href="/garlic.go#L218" rel="nofollow">
         Close
       </a>
     </h3>
@@ -95,7 +95,7 @@
     </p>
     <h3>
       func
-      <a href="/garlic.go#L191" rel="nofollow">
+      <a href="/garlic.go#L209" rel="nofollow">
         CloseAll
       </a>
     </h3>
@@ -110,7 +110,50 @@
     </p>
     <h3>
       func
-      <a href="/garlic.go#L226" rel="nofollow">
+      <a href="/common.go#L57" rel="nofollow">
+        DeleteI2PKeyStore
+      </a>
+    </h3>
+    <p>
+      <code>
+        func DeleteI2PKeyStore() error
+      </code>
+    </p>
+    <p>
+      DeleteI2PKeyStore deletes the I2P Keystore.
+    </p>
+    <h3>
+      func
+      <a href="/garlic.go#L157" rel="nofollow">
+        DeleteKeys
+      </a>
+    </h3>
+    <p>
+      <code>
+        func DeleteKeys(tunName string) error
+      </code>
+    </p>
+    <p>
+      DeleteKeys deletes the key file at the given path as determined by
+      keystore + tunName.
+    </p>
+    <h3>
+      func
+      <a href="/common.go#L75" rel="nofollow">
+        DeleteTorKeyStore
+      </a>
+    </h3>
+    <p>
+      <code>
+        func DeleteTorKeyStore() error
+      </code>
+    </p>
+    <p>
+      DeleteTorKeyStore deletes the Onion Keystore.
+    </p>
+    <h3>
+      func
+      <a href="/garlic.go#L244" rel="nofollow">
         Dial
       </a>
     </h3>
@@ -140,7 +183,7 @@
     </p>
     <h3>
       func
-      <a href="/garlic.go#L153" rel="nofollow">
+      <a href="/garlic.go#L171" rel="nofollow">
         I2PKeys
       </a>
     </h3>
@@ -171,7 +214,7 @@
     </p>
     <h3>
       func
-      <a href="/garlic.go#L214" rel="nofollow">
+      <a href="/garlic.go#L232" rel="nofollow">
         Listen
       </a>
     </h3>
@@ -187,7 +230,7 @@
     </p>
     <h3>
       func
-      <a href="/common.go#L59" rel="nofollow">
+      <a href="/common.go#L64" rel="nofollow">
         TorKeystorePath
       </a>
     </h3>
@@ -221,7 +264,7 @@
     </p>
     <h4>
       func
-      <a href="/garlic.go#L136" rel="nofollow">
+      <a href="/garlic.go#L140" rel="nofollow">
         NewGarlic
       </a>
     </h4>
@@ -247,6 +290,17 @@
     </p>
     <p>
       Close closes the Garlic structure’s sessions and listeners.
+    </p>
+    <h4>
+      func (*Garlic)
+      <a href="/garlic.go#L134" rel="nofollow">
+        DeleteKeys
+      </a>
+    </h4>
+    <p>
+      <code>
+        func (g *Garlic) DeleteKeys() error
+      </code>
     </p>
     <h4>
       func (*Garlic)
