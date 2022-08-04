@@ -47,16 +47,16 @@
     </h3>
     <pre><code>package main
 
-import(
-    &#34;fmt&#34;
-    &#34;log&#34;
-    &#34;net/http&#34;
+import (
+	&#34;fmt&#34;
+	&#34;log&#34;
+	&#34;net/http&#34;
 
-    &#34;github.com/eyedeekay/onramp&#34;
+	&#34;github.com/eyedeekay/onramp&#34;
 )
 
 func main() {
-    garlic := &amp;onramp.Garlic{}
+	garlic := &amp;onramp.Garlic{}
 	defer garlic.Close()
 	listener, err := garlic.Listen()
 	if err != nil {
@@ -66,7 +66,7 @@ func main() {
 	http.HandleFunc(&#34;/&#34;, func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, &#34;Hello, %q&#34;, r.URL.Path)
 	})
-    if err := http.Serve(listener, nil); err != nil {
+	if err := http.Serve(listener, nil); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -76,17 +76,17 @@ func main() {
     </h3>
     <pre><code>package main
 
-import(
-    &#34;fmt&#34;
-    &#34;io/ioutil&#34;
-    &#34;log&#34;
-    &#34;net/http&#34;
+import (
+	&#34;fmt&#34;
+	&#34;io/ioutil&#34;
+	&#34;log&#34;
+	&#34;net/http&#34;
 
-    &#34;github.com/eyedeekay/onramp&#34;
+	&#34;github.com/eyedeekay/onramp&#34;
 )
 
 func main() {
-    garlic := &amp;onramp.Garlic{}
+	garlic := &amp;onramp.Garlic{}
 	defer garlic.Close()
 	transport := http.Transport{
 		Dial: garlic.Dial,
@@ -106,6 +106,7 @@ func main() {
 	}
 	fmt.Println(string(body))
 }
+
 </code></pre>
     <h3>
       Usage as instance of a struct, Listener and Dialer on same address
@@ -157,24 +158,23 @@ func Serve(listener net.Listener) {
 		log.Fatal(err)
 	}
 }
-
 </code></pre>
     <h3>
       Usage as automatically-managed Listeners
     </h3>
     <pre><code>package main
 
-import(
-    &#34;fmt&#34;
-    &#34;log&#34;
-    &#34;net/http&#34;
+import (
+	&#34;fmt&#34;
+	&#34;log&#34;
+	&#34;net/http&#34;
 
-    &#34;github.com/eyedeekay/onramp&#34;
+	&#34;github.com/eyedeekay/onramp&#34;
 )
 
 func main() {
-    defer onramp.CloseAll()
-    listener, err := onramp.Listen(&#34;tcp&#34;, &#34;service.i2p&#34;)
+	defer onramp.CloseAll()
+	listener, err := onramp.Listen(&#34;tcp&#34;, &#34;service.i2p&#34;)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -182,30 +182,32 @@ func main() {
 	http.HandleFunc(&#34;/&#34;, func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, &#34;Hello, %q&#34;, r.URL.Path)
 	})
-    if err := http.Serve(listener, nil); err != nil {
+	if err := http.Serve(listener, nil); err != nil {
 		log.Fatal(err)
 	}
 }
+
 </code></pre>
     <h3>
       Usage as automatically-managed Dialers
     </h3>
     <pre><code>package main
 
-import(
-    &#34;fmt&#34;
-    &#34;log&#34;
-    &#34;net/http&#34;
+import (
+	&#34;fmt&#34;
+	&#34;io/ioutil&#34;
+	&#34;log&#34;
+	&#34;net/http&#34;
 
-    &#34;github.com/eyedeekay/onramp&#34;
+	&#34;github.com/eyedeekay/onramp&#34;
 )
 
 func main() {
-    defer onramp.CloseAll()
-    transport := http.Transport {
-        Dial: onramp.Dial,
-    }
-    client := &amp;http.Client{
+	defer onramp.CloseAll()
+	transport := http.Transport{
+		Dial: onramp.Dial,
+	}
+	client := &amp;http.Client{
 		Transport: &amp;transport,
 	}
 	resp, err := client.Get(&#34;http://&#34; + listener.Addr().String() + &#34;/&#34;)
@@ -218,8 +220,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(string(body))    
+	fmt.Println(string(body))
 }
+
 </code></pre>
     <div>
       <a href="#show">
