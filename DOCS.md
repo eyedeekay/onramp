@@ -25,6 +25,13 @@ var ONION_KEYSTORE_PATH = tordefault
 var OPT_DEFAULTS = sam3.Options_Default
 ```
 
+SAM_ADDR is the default I2P SAM address. It can be overridden by the
+struct or by changing this variable.
+
+```golang
+var SAM_ADDR = "127.0.0.1:7656"
+```
+
 ## Functions
 
 ### func [Close](/garlic.go#L200)
@@ -41,7 +48,7 @@ objects instantiated by an app.
 Close() closes all garlics managed by the onramp package. It does not
 affect objects instantiated by an app.
 
-### func [Dial](/garlic.go#L222)
+### func [Dial](/garlic.go#L226)
 
 `func Dial(network, addr string) (net.Conn, error)`
 
@@ -70,7 +77,7 @@ I2PKeystorePath returns the path to the I2P Keystore. If the
 path is not set, it returns the default path. If the path does
 not exist, it creates it.
 
-### func [Listen](/garlic.go#L210)
+### func [Listen](/garlic.go#L214)
 
 `func Listen(network, keys string) (net.Listener, error)`
 

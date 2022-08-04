@@ -26,6 +26,11 @@
                 DOCS
               </a>
             </li>
+            <li>
+              <a href="EXAMPLE.html">
+                EXAMPLE
+              </a>
+            </li>
           </ul>
           <br>
           <a href="#hidenav">
@@ -41,8 +46,189 @@
     </h1>
     <p>
       High-level, easy-to-use listeners and clients for I2P and onion URL’s from Go.
-      Provides only the most widely-used functions in a basic way. It expects nothing from the users.
+      Provides only the most widely-used functions in a basic way. It expects nothing
+      from the users, an otherwise empty instance of the struct will listen and dial
+      I2P Streaming and Tor TCP sessions successfully.
     </p>
+    <h3>
+      Usage as instance of a struct, Listener
+    </h3>
+    <pre><code>package main
+
+import(
+    &#34;fmt&#34;
+    &#34;log&#34;
+    &#34;net/http&#34;
+
+    &#34;github.com/eyedeekay/onramp&#34;
+)
+
+func main() {
+    garlic := &amp;onramp.Garlic{}
+	defer garlic.Close()
+	listener, err := garlic.Listen()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer listener.Close()
+	http.HandleFunc(&#34;/&#34;, func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, &#34;Hello, %q&#34;, r.URL.Path)
+	})
+    if err := http.Serve(listener, nil); err != nil {
+		log.Fatal(err)
+	}
+}
+</code></pre>
+    <h3>
+      Usage as instance of a struct, Dialer
+    </h3>
+    <pre><code>package main
+
+import(
+    &#34;fmt&#34;
+    &#34;io/ioutil&#34;
+    &#34;log&#34;
+    &#34;net/http&#34;
+
+    &#34;github.com/eyedeekay/onramp&#34;
+)
+
+func main() {
+    garlic := &amp;onramp.Garlic{}
+	defer garlic.Close()
+	transport := http.Transport{
+		Dial: garlic.Dial,
+	}
+	client := &amp;http.Client{
+		Transport: &amp;transport,
+	}
+	resp, err := client.Get(&#34;http://&#34; + listener.Addr().String() + &#34;/&#34;)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+	fmt.Println(resp.Status)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(body))
+}
+</code></pre>
+    <h3>
+      Usage as instance of a struct, Listener and Dialer on same address
+    </h3>
+    <pre><code>package main
+
+import (
+	&#34;fmt&#34;
+	&#34;io/ioutil&#34;
+	&#34;log&#34;
+	&#34;net&#34;
+	&#34;net/http&#34;
+)
+
+func main() {
+	garlic := &amp;Garlic{}
+	defer garlic.Close()
+	listener, err := garlic.Listen()
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(&#34;listener:&#34;, listener.Addr().String())
+	defer listener.Close()
+	http.HandleFunc(&#34;/&#34;, func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, &#34;Hello, %q&#34;, r.URL.Path)
+	})
+	go Serve(listener)
+	transport := http.Transport{
+		Dial: garlic.Dial,
+	}
+	client := &amp;http.Client{
+		Transport: &amp;transport,
+	}
+	resp, err := client.Get(&#34;http://&#34; + listener.Addr().String() + &#34;/&#34;)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+	fmt.Println(resp.Status)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(body))
+}
+
+func Serve(listener net.Listener) {
+	if err := http.Serve(listener, nil); err != nil {
+		log.Fatal(err)
+	}
+}
+
+</code></pre>
+    <h3>
+      Usage as automatically-managed Listeners
+    </h3>
+    <pre><code>package main
+
+import(
+    &#34;fmt&#34;
+    &#34;log&#34;
+    &#34;net/http&#34;
+
+    &#34;github.com/eyedeekay/onramp&#34;
+)
+
+func main() {
+    defer onramp.CloseAll()
+    listener, err := onramp.Listen(&#34;tcp&#34;, &#34;service.i2p&#34;)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer listener.Close()
+	http.HandleFunc(&#34;/&#34;, func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, &#34;Hello, %q&#34;, r.URL.Path)
+	})
+    if err := http.Serve(listener, nil); err != nil {
+		log.Fatal(err)
+	}
+}
+</code></pre>
+    <h3>
+      Usage as automatically-managed Dialers
+    </h3>
+    <pre><code>package main
+
+import(
+    &#34;fmt&#34;
+    &#34;log&#34;
+    &#34;net/http&#34;
+
+    &#34;github.com/eyedeekay/onramp&#34;
+)
+
+func main() {
+    defer onramp.CloseAll()
+    transport := http.Transport {
+        Dial: onramp.Dial,
+    }
+    client := &amp;http.Client{
+		Transport: &amp;transport,
+	}
+	resp, err := client.Get(&#34;http://&#34; + listener.Addr().String() + &#34;/&#34;)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer resp.Body.Close()
+	fmt.Println(resp.Status)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(body))    
+}
+</code></pre>
     <div>
       <a href="#show">
         Show license

@@ -204,11 +204,15 @@ func Close(tunName string) {
 	}
 }
 
+// SAM_ADDR is the default I2P SAM address. It can be overridden by the
+// struct or by changing this variable.
+var SAM_ADDR = "127.0.0.1:7656"
+
 // Listen returns a net.Listener for a garlic structure's keys
 // corresponding to a structure managed by the onramp library
 // and not instantiated by an app.
 func Listen(network, keys string) (net.Listener, error) {
-	g, err := NewGarlic(network, keys, OPT_DEFAULTS)
+	g, err := NewGarlic(keys, SAM_ADDR, OPT_DEFAULTS)
 	if err != nil {
 		return nil, fmt.Errorf("onramp Listen: %v", err)
 	}
@@ -220,7 +224,7 @@ func Listen(network, keys string) (net.Listener, error) {
 // corresponding to a structure managed by the onramp library
 // and not instantiated by an app.
 func Dial(network, addr string) (net.Conn, error) {
-	g, err := NewGarlic(network, addr, OPT_DEFAULTS)
+	g, err := NewGarlic(addr, SAM_ADDR, OPT_DEFAULTS)
 	if err != nil {
 		return nil, fmt.Errorf("onramp Dial: %v", err)
 	}
