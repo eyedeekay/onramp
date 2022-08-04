@@ -64,6 +64,233 @@
 </code></pre>
     <pre><code>var OPT_DEFAULTS = sam3.Options_Default
 </code></pre>
+    <h2>
+      Functions
+    </h2>
+    <h3>
+      func
+      <a href="/garlic.go#L200" rel="nofollow">
+        Close
+      </a>
+    </h3>
+    <p>
+      <code>
+        func Close(tunName string)
+      </code>
+    </p>
+    <p>
+      Close closes the Garlic at the given index. It does not affect Garlic
+      objects instantiated by an app.
+    </p>
+    <h3>
+      func
+      <a href="/garlic.go#L191" rel="nofollow">
+        CloseAll
+      </a>
+    </h3>
+    <p>
+      <code>
+        func CloseAll()
+      </code>
+    </p>
+    <p>
+      Close() closes all garlics managed by the onramp package. It does not
+      affect objects instantiated by an app.
+    </p>
+    <h3>
+      func
+      <a href="/garlic.go#L222" rel="nofollow">
+        Dial
+      </a>
+    </h3>
+    <p>
+      <code>
+        func Dial(network, addr string) (net.Conn, error)
+      </code>
+    </p>
+    <p>
+      Dial returns a net.Conn for a garlic structure’s keys
+      corresponding to a structure managed by the onramp library
+      and not instantiated by an app.
+    </p>
+    <h3>
+      func
+      <a href="/common.go#L14" rel="nofollow">
+        GetJoinedWD
+      </a>
+    </h3>
+    <p>
+      <code>
+        func GetJoinedWD(dir string) (string, error)
+      </code>
+    </p>
+    <p>
+      GetJoinedWD returns the working directory joined with the given path.
+    </p>
+    <h3>
+      func
+      <a href="/garlic.go#L153" rel="nofollow">
+        I2PKeys
+      </a>
+    </h3>
+    <p>
+      <code>
+        func I2PKeys(tunName, samAddr string) (i2pkeys.I2PKeys, error)
+      </code>
+    </p>
+    <p>
+      I2PKeys returns the I2PKeys at the keystore directory for the given
+      tunnel name. If none exist, they are created and stored.
+    </p>
+    <h3>
+      func
+      <a href="/common.go#L46" rel="nofollow">
+        I2PKeystorePath
+      </a>
+    </h3>
+    <p>
+      <code>
+        func I2PKeystorePath() (string, error)
+      </code>
+    </p>
+    <p>
+      I2PKeystorePath returns the path to the I2P Keystore. If the
+      path is not set, it returns the default path. If the path does
+      not exist, it creates it.
+    </p>
+    <h3>
+      func
+      <a href="/garlic.go#L210" rel="nofollow">
+        Listen
+      </a>
+    </h3>
+    <p>
+      <code>
+        func Listen(network, keys string) (net.Listener, error)
+      </code>
+    </p>
+    <p>
+      Listen returns a net.Listener for a garlic structure’s keys
+      corresponding to a structure managed by the onramp library
+      and not instantiated by an app.
+    </p>
+    <h3>
+      func
+      <a href="/common.go#L59" rel="nofollow">
+        TorKeystorePath
+      </a>
+    </h3>
+    <p>
+      <code>
+        func TorKeystorePath() (string, error)
+      </code>
+    </p>
+    <p>
+      TorKeystorePath returns the path to the Onion Keystore. If the
+      path is not set, it returns the default path. If the path does
+      not exist, it creates it.
+    </p>
+    <h2>
+      Types
+    </h2>
+    <h3>
+      type
+      <a href="/garlic.go#L19" rel="nofollow">
+        Garlic
+      </a>
+    </h3>
+    <p>
+      <code>
+        type Garlic struct { ... }
+      </code>
+    </p>
+    <p>
+      Garlic is a ready-made I2P streaming manager. Once initialized it always
+      has a valid I2PKeys and StreamSession.
+    </p>
+    <h4>
+      func
+      <a href="/garlic.go#L136" rel="nofollow">
+        NewGarlic
+      </a>
+    </h4>
+    <p>
+      <code>
+        func NewGarlic(tunName, samAddr string, options []string) (*Garlic, error)
+      </code>
+    </p>
+    <p>
+      NewGarlic returns a new Garlic struct. It is immediately ready to use with
+      I2P streaming.
+    </p>
+    <h4>
+      func (*Garlic)
+      <a href="/garlic.go#L111" rel="nofollow">
+        Close
+      </a>
+    </h4>
+    <p>
+      <code>
+        func (g *Garlic) Close() error
+      </code>
+    </p>
+    <p>
+      Close closes the Garlic structure’s sessions and listeners.
+    </p>
+    <h4>
+      func (*Garlic)
+      <a href="/garlic.go#L99" rel="nofollow">
+        Dial
+      </a>
+    </h4>
+    <p>
+      <code>
+        func (g *Garlic) Dial(net, addr string) (net.Conn, error)
+      </code>
+    </p>
+    <p>
+      Dial returns a net.Conn for the Garlic structure’s I2P keys.
+    </p>
+    <h4>
+      func (*Garlic)
+      <a href="/garlic.go#L126" rel="nofollow">
+        Keys
+      </a>
+    </h4>
+    <p>
+      <code>
+        func (g *Garlic) Keys() (i2pkeys.I2PKeys, error)
+      </code>
+    </p>
+    <p>
+      Keys returns the I2PKeys for the Garlic structure. If none
+      exist, they are created and stored.
+    </p>
+    <h4>
+      func (*Garlic)
+      <a href="/garlic.go#L81" rel="nofollow">
+        Listen
+      </a>
+    </h4>
+    <p>
+      <code>
+        func (g *Garlic) Listen() (net.Listener, error)
+      </code>
+    </p>
+    <p>
+      Listen returns a net.Listener for the Garlic structure’s I2P keys.
+    </p>
+    <h3>
+      type
+      <a href="/onion.go#L6" rel="nofollow">
+        Onion
+      </a>
+    </h3>
+    <p>
+      <code>
+        type Onion struct { ... }
+      </code>
+    </p>
     <hr/>
     <p>
       Readme created from Go doc with
