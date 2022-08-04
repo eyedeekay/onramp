@@ -157,7 +157,7 @@
     </p>
     <h3>
       func
-      <a href="/common.go#L57" rel="nofollow">
+      <a href="/common.go#L60" rel="nofollow">
         DeleteI2PKeyStore
       </a>
     </h3>
@@ -186,7 +186,7 @@
     </p>
     <h3>
       func
-      <a href="/common.go#L75" rel="nofollow">
+      <a href="/common.go#L78" rel="nofollow">
         DeleteTorKeyStore
       </a>
     </h3>
@@ -197,6 +197,22 @@
     </p>
     <p>
       DeleteTorKeyStore deletes the Onion Keystore.
+    </p>
+    <h3>
+      func
+      <a href="/common.go#L85" rel="nofollow">
+        Dial
+      </a>
+    </h3>
+    <p>
+      <code>
+        func Dial(network, addr string) (net.Conn, error)
+      </code>
+    </p>
+    <p>
+      Dial returns a connection for the given network and address.
+      network is ignored. If the address ends in i2p, it returns an I2P connection.
+      if the address ends in anything else, it returns a Tor connection.
     </p>
     <h3>
       func
@@ -232,7 +248,7 @@
     </p>
     <h3>
       func
-      <a href="/common.go#L14" rel="nofollow">
+      <a href="/common.go#L17" rel="nofollow">
         GetJoinedWD
       </a>
     </h3>
@@ -261,7 +277,7 @@
     </p>
     <h3>
       func
-      <a href="/common.go#L46" rel="nofollow">
+      <a href="/common.go#L49" rel="nofollow">
         I2PKeystorePath
       </a>
     </h3>
@@ -274,6 +290,23 @@
       I2PKeystorePath returns the path to the I2P Keystore. If the
       path is not set, it returns the default path. If the path does
       not exist, it creates it.
+    </p>
+    <h3>
+      func
+      <a href="/common.go#L101" rel="nofollow">
+        Listen
+      </a>
+    </h3>
+    <p>
+      <code>
+        func Listen(network, keys string) (net.Listener, error)
+      </code>
+    </p>
+    <p>
+      Listen returns a listener for the given network and address.
+      if network is i2p or garlic, it returns an I2P listener.
+      if network is tor or onion, it returns an Onion listener.
+      if keys ends with “.i2p”, it returns an I2P listener.
     </p>
     <h3>
       func
@@ -325,7 +358,7 @@
     </p>
     <h3>
       func
-      <a href="/common.go#L64" rel="nofollow">
+      <a href="/common.go#L67" rel="nofollow">
         TorKeystorePath
       </a>
     </h3>
