@@ -204,18 +204,18 @@ func I2PKeys(tunName, samAddr string) (i2pkeys.I2PKeys, error) {
 
 var garlics map[string]*Garlic
 
-// Close() closes all garlics managed by the onramp package. It does not
+// CloseAllGarlic closes all garlics managed by the onramp package. It does not
 // affect objects instantiated by an app.
-func CloseAll() {
+func CloseAllGarlic() {
 	for i, g := range garlics {
 		log.Println("Closing garlic", g.name)
-		Close(i)
+		CloseGarlic(i)
 	}
 }
 
-// Close closes the Garlic at the given index. It does not affect Garlic
+// CloseGarlic closes the Garlic at the given index. It does not affect Garlic
 // objects instantiated by an app.
-func Close(tunName string) {
+func CloseGarlic(tunName string) {
 	g, ok := garlics[tunName]
 	if ok {
 		g.Close()
@@ -226,10 +226,10 @@ func Close(tunName string) {
 // struct or by changing this variable.
 var SAM_ADDR = "127.0.0.1:7656"
 
-// Listen returns a net.Listener for a garlic structure's keys
+// ListenGarlic returns a net.Listener for a garlic structure's keys
 // corresponding to a structure managed by the onramp library
 // and not instantiated by an app.
-func Listen(network, keys string) (net.Listener, error) {
+func ListenGarlic(network, keys string) (net.Listener, error) {
 	g, err := NewGarlic(keys, SAM_ADDR, OPT_DEFAULTS)
 	if err != nil {
 		return nil, fmt.Errorf("onramp Listen: %v", err)
@@ -238,10 +238,10 @@ func Listen(network, keys string) (net.Listener, error) {
 	return g.Listen()
 }
 
-// Dial returns a net.Conn for a garlic structure's keys
+// DialGarlic returns a net.Conn for a garlic structure's keys
 // corresponding to a structure managed by the onramp library
 // and not instantiated by an app.
-func Dial(network, addr string) (net.Conn, error) {
+func DialGarlic(network, addr string) (net.Conn, error) {
 	g, err := NewGarlic(addr, SAM_ADDR, OPT_DEFAULTS)
 	if err != nil {
 		return nil, fmt.Errorf("onramp Dial: %v", err)
