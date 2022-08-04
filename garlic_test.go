@@ -4,13 +4,15 @@
 package onramp
 
 import (
+	"fmt"
+	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
+	"testing"
 	"time"
 )
 
-/*
 func TestBareGarlic(t *testing.T) {
 	fmt.Println("TestBareGarlic Countdown")
 	Sleep(5)
@@ -45,7 +47,7 @@ func TestBareGarlic(t *testing.T) {
 	}
 	fmt.Println(string(body))
 }
-*/
+
 func Serve(listener net.Listener) {
 	if err := http.Serve(listener, nil); err != nil {
 		log.Fatal(err)
