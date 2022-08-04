@@ -157,7 +157,7 @@ exist, they are created and stored.
 
 Listen returns a net.Listener for the Garlic structure's I2P keys.
 
-### type [Onion](/onion.go#L6)
+### type [Onion](/onion.go#L8)
 
 `type Onion struct { ... }`
 
