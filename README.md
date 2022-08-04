@@ -19,7 +19,7 @@ Usage
 Basic usage is designed to be very simple, import the package and instantiate
 a struct and you're ready to go.
 
-For more extensive examples, see: [EXAMPLE](example.md)
+For more extensive examples, see: [EXAMPLE](EXAMPLE.md)
 
 ### I2P(Garlic) Usage:
 
