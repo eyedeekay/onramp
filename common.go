@@ -53,6 +53,11 @@ func I2PKeystorePath() (string, error) {
 	return I2P_KEYSTORE_PATH, nil
 }
 
+// DeleteI2PKeyStore deletes the I2P Keystore.
+func DeleteI2PKeyStore() error {
+	return os.RemoveAll(I2P_KEYSTORE_PATH)
+}
+
 // TorKeystorePath returns the path to the Onion Keystore. If the
 // path is not set, it returns the default path. If the path does
 // not exist, it creates it.
@@ -64,4 +69,9 @@ func TorKeystorePath() (string, error) {
 		}
 	}
 	return ONION_KEYSTORE_PATH, nil
+}
+
+// DeleteTorKeyStore deletes the Onion Keystore.
+func DeleteTorKeyStore() error {
+	return os.RemoveAll(ONION_KEYSTORE_PATH)
 }

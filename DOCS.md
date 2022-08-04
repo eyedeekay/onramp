@@ -34,21 +34,40 @@ var SAM_ADDR = "127.0.0.1:7656"
 
 ## Functions
 
-### func [Close](/garlic.go#L200)
+### func [Close](/garlic.go#L218)
 
 `func Close(tunName string)`
 
 Close closes the Garlic at the given index. It does not affect Garlic
 objects instantiated by an app.
 
-### func [CloseAll](/garlic.go#L191)
+### func [CloseAll](/garlic.go#L209)
 
 `func CloseAll()`
 
 Close() closes all garlics managed by the onramp package. It does not
 affect objects instantiated by an app.
 
-### func [Dial](/garlic.go#L226)
+### func [DeleteI2PKeyStore](/common.go#L57)
+
+`func DeleteI2PKeyStore() error`
+
+DeleteI2PKeyStore deletes the I2P Keystore.
+
+### func [DeleteKeys](/garlic.go#L157)
+
+`func DeleteKeys(tunName string) error`
+
+DeleteKeys deletes the key file at the given path as determined by
+keystore + tunName.
+
+### func [DeleteTorKeyStore](/common.go#L75)
+
+`func DeleteTorKeyStore() error`
+
+DeleteTorKeyStore deletes the Onion Keystore.
+
+### func [Dial](/garlic.go#L244)
 
 `func Dial(network, addr string) (net.Conn, error)`
 
@@ -62,7 +81,7 @@ and not instantiated by an app.
 
 GetJoinedWD returns the working directory joined with the given path.
 
-### func [I2PKeys](/garlic.go#L153)
+### func [I2PKeys](/garlic.go#L171)
 
 `func I2PKeys(tunName, samAddr string) (i2pkeys.I2PKeys, error)`
 
@@ -77,7 +96,7 @@ I2PKeystorePath returns the path to the I2P Keystore. If the
 path is not set, it returns the default path. If the path does
 not exist, it creates it.
 
-### func [Listen](/garlic.go#L214)
+### func [Listen](/garlic.go#L232)
 
 `func Listen(network, keys string) (net.Listener, error)`
 
@@ -85,7 +104,7 @@ Listen returns a net.Listener for a garlic structure's keys
 corresponding to a structure managed by the onramp library
 and not instantiated by an app.
 
-### func [TorKeystorePath](/common.go#L59)
+### func [TorKeystorePath](/common.go#L64)
 
 `func TorKeystorePath() (string, error)`
 
@@ -102,7 +121,7 @@ not exist, it creates it.
 Garlic is a ready-made I2P streaming manager. Once initialized it always
 has a valid I2PKeys and StreamSession.
 
-#### func [NewGarlic](/garlic.go#L136)
+#### func [NewGarlic](/garlic.go#L140)
 
 `func NewGarlic(tunName, samAddr string, options []string) (*Garlic, error)`
 
@@ -114,6 +133,10 @@ I2P streaming.
 `func (g *Garlic) Close() error`
 
 Close closes the Garlic structure's sessions and listeners.
+
+#### func (*Garlic) [DeleteKeys](/garlic.go#L134)
+
+`func (g *Garlic) DeleteKeys() error`
 
 #### func (*Garlic) [Dial](/garlic.go#L99)
 

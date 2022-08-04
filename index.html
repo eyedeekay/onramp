@@ -50,9 +50,41 @@
       from the users, an otherwise empty instance of the structs will listen and dial
       I2P Streaming and Tor TCP sessions successfully.
     </p>
+    <p>
+      In all cases, it assumes that keys are “persistent” in that they are managed
+      maintained between usages of the same application in the same configuration.
+      This means that hidden services will maintain their identities, and that clients
+      will always have the same return addresses. If you don’t want this behavior,
+      make sure to delete the “keystore” when your app closes or when your application
+      needs to cycle keys by calling the
+      <code>
+        Garlic.DeleteKeys()
+      </code>
+      function.
+    </p>
     <h2>
-      I2P(Garlic) Usage:
+      Usage
     </h2>
+    <p>
+      Basic usage is designed to be very simple, import the package and instantiate
+      a struct and you’re ready to go.
+    </p>
+    <p>
+      For more extensive examples, see:
+      <a href="example.md" rel="nofollow">
+        EXAMPLE
+      </a>
+    </p>
+    <h3>
+      I2P(Garlic) Usage:
+    </h3>
+    <p>
+      When using it to manage an I2P session, set up an
+      <code>
+        onramp.Garlic
+      </code>
+      struct.
+    </p>
     <pre><code>package main
 
 import(
@@ -71,9 +103,16 @@ func main() {
 	defer listener.Close()
 }
 </code></pre>
-    <h2>
+    <h3>
       Tor(Onion) Usage:
-    </h2>
+    </h3>
+    <p>
+      When using it to manage a Tor session, set up an
+      <code>
+        onramp.Onion
+      </code>
+      struct.
+    </p>
     <pre><code>package main
 
 import(

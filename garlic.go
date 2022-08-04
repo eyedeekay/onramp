@@ -131,6 +131,10 @@ func (g *Garlic) Keys() (i2pkeys.I2PKeys, error) {
 	return keys, nil
 }
 
+func (g *Garlic) DeleteKeys() error {
+	return DeleteKeys(g.getName())
+}
+
 // NewGarlic returns a new Garlic struct. It is immediately ready to use with
 // I2P streaming.
 func NewGarlic(tunName, samAddr string, options []string) (*Garlic, error) {
@@ -146,6 +150,20 @@ func NewGarlic(tunName, samAddr string, options []string) (*Garlic, error) {
 		return nil, fmt.Errorf("onramp NewGarlic: %v", err)
 	}
 	return g, nil
+}
+
+// DeleteKeys deletes the key file at the given path as determined by
+// keystore + tunName.
+func DeleteKeys(tunName string) error {
+	keystore, err := I2PKeystorePath()
+	if err != nil {
+		return fmt.Errorf("onramp DeleteKeys: discovery error %v", err)
+	}
+	keyspath := filepath.Join(keystore, tunName+".i2p.private")
+	if err := os.Remove(keyspath); err != nil {
+		return fmt.Errorf("onramp DeleteKeys: %v", err)
+	}
+	return nil
 }
 
 // I2PKeys returns the I2PKeys at the keystore directory for the given
