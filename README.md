@@ -28,6 +28,7 @@ When using it to manage an I2P session, set up an `onramp.Garlic`
 struct.
 
 ```Go
+
 package main
 
 import (
@@ -53,6 +54,7 @@ When using it to manage a Tor session, set up an `onramp.Onion`
 struct.
 
 ```Go
+
 package main
 
 import (

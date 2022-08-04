@@ -4,6 +4,7 @@ Example Usage
 ### Usage as instance of a struct, Listener
 
 ```Go
+
 package main
 
 import (
@@ -34,6 +35,7 @@ func main() {
 ### Usage as instance of a struct, Dialer
 
 ```Go
+
 package main
 
 import (
@@ -72,6 +74,7 @@ func main() {
 ### Usage as instance of a struct, Listener and Dialer on same address
 
 ```Go
+
 package main
 
 import (
@@ -124,6 +127,7 @@ func Serve(listener net.Listener) {
 ### Usage as automatically-managed Listeners
 
 ```Go
+
 package main
 
 import (
@@ -154,6 +158,7 @@ func main() {
 ### Usage as automatically-managed Dialers
 
 ```Go
+
 package main
 
 import (
