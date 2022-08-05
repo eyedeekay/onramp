@@ -4,6 +4,7 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
+	"crypto/tls"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/asn1"
@@ -15,13 +16,66 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/cretz/bine/torutil"
 )
 
-// CreateTLSCertificate generates a TLS certificate for the given hostname,
-// and stores it in the TLS keystore for the application.
-func CreateTLSCertificate(tlsHost string) error {
+// TLSKeys returns the TLS certificate and key for the given Garlic.
+// if no TLS keys exist, they will be generated. They will be valid for
+// the .b32.i2p domain.
+func (g *Garlic) TLSKeys() (tls.Certificate, error) {
+	keys, err := g.Keys()
+	if err != nil {
+		return tls.Certificate{}, err
+	}
+	base32 := keys.Addr().Base32()
+	return TLSKeys(base32)
+}
+
+// TLSKeys returns the TLS certificate and key for the given Onion.
+// if no TLS keys exist, they will be generated. They will be valid for
+// the .onion domain.
+func (o *Onion) TLSKeys() (tls.Certificate, error) {
+	keys, err := o.Keys()
+	if err != nil {
+		return tls.Certificate{}, err
+	}
+	onionService := torutil.OnionServiceIDFromPrivateKey(keys.PrivateKey)
+	return TLSKeys(onionService)
+}
+
+// TLSKeys returns the TLS certificate and key for the given hostname.
+func TLSKeys(tlsHost string) (tls.Certificate, error) {
 	tlsCert := tlsHost + ".crt"
 	tlsKey := tlsHost + ".pem"
+	if err := CreateTLSCertificate(tlsHost); nil != err {
+		return tls.Certificate{}, err
+	}
+	tlsKeystorePath, err := TLSKeystorePath()
+	if err != nil {
+		return tls.Certificate{}, err
+	}
+	tlsCertPath := filepath.Join(tlsKeystorePath, tlsCert)
+	tlsKeyPath := filepath.Join(tlsKeystorePath, tlsKey)
+	cert, err := tls.LoadX509KeyPair(tlsCertPath, tlsKeyPath)
+	if err != nil {
+		return cert, err
+	}
+	return cert, nil
+}
+
+// CreateTLSCertificate generates a TLS certificate for the given hostname,
+// and stores it in the TLS keystore for the application. If the keys already
+// exist, generation is skipped.
+func CreateTLSCertificate(tlsHost string) error {
+	tlsCertName := tlsHost + ".crt"
+	tlsKeyName := tlsHost + ".pem"
+	tlsKeystorePath, err := TLSKeystorePath()
+	if err != nil {
+		return err
+	}
+	tlsCert := filepath.Join(tlsKeystorePath, tlsCertName)
+	tlsKey := filepath.Join(tlsKeystorePath, tlsKeyName)
 	_, certErr := os.Stat(tlsCert)
 	_, keyErr := os.Stat(tlsKey)
 	if certErr != nil || keyErr != nil {

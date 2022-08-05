@@ -4,6 +4,7 @@
 package onramp
 
 import (
+	"crypto/tls"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -16,7 +17,7 @@ func TestBareOnion(t *testing.T) {
 	Sleep(5)
 	onion := &Onion{}
 	defer onion.Close()
-	listener, err := onion.Listen()
+	listener, err := onion.ListenTLS()
 	if err != nil {
 		t.Error(err)
 	}
@@ -29,11 +30,14 @@ func TestBareOnion(t *testing.T) {
 	Sleep(15)
 	transport := http.Transport{
 		Dial: onion.Dial,
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: true,
+		},
 	}
 	client := &http.Client{
 		Transport: &transport,
 	}
-	resp, err := client.Get("http://" + listener.Addr().String() + "/")
+	resp, err := client.Get("https://" + listener.Addr().String() + "/")
 	if err != nil {
 		t.Error(err)
 	}
@@ -44,5 +48,5 @@ func TestBareOnion(t *testing.T) {
 	}
 	fmt.Println("Body:", string(body))
 	resp.Body.Close()
-
+	Sleep(5)
 }

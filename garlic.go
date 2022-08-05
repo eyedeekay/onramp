@@ -4,6 +4,7 @@
 package onramp
 
 import (
+	"crypto/tls"
 	"fmt"
 	"log"
 	"net"
@@ -93,6 +94,35 @@ func (g *Garlic) Listen() (net.Listener, error) {
 		}
 	}
 	return g.StreamListener, nil
+}
+
+// ListenTLS returns a net.Listener for the Garlic structure's I2P keys,
+// which also uses TLS either for additional encryption, authentication,
+// or browser-compatibility.
+func (g *Garlic) ListenTLS() (net.Listener, error) {
+	var err error
+	if g.SAM, err = g.samSession(); err != nil {
+		return nil, fmt.Errorf("onramp NewGarlic: %v", err)
+	}
+	if g.StreamSession, err = g.setupStreamSession(); err != nil {
+		return nil, fmt.Errorf("onramp Listen: %v", err)
+	}
+	if g.StreamListener == nil {
+		g.StreamListener, err = g.StreamSession.Listen()
+		if err != nil {
+			return nil, fmt.Errorf("onramp Listen: %v", err)
+		}
+	}
+	cert, err := g.TLSKeys()
+	if err != nil {
+		return nil, fmt.Errorf("onramp ListenTLS: %v", err)
+	}
+	return tls.NewListener(
+		g.StreamListener,
+		&tls.Config{
+			Certificates: []tls.Certificate{cert},
+		},
+	), nil
 }
 
 // Dial returns a net.Conn for the Garlic structure's I2P keys.

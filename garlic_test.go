@@ -4,6 +4,7 @@
 package onramp
 
 import (
+	"crypto/tls"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -18,7 +19,7 @@ func TestBareGarlic(t *testing.T) {
 	Sleep(5)
 	garlic := &Garlic{}
 	defer garlic.Close()
-	listener, err := garlic.Listen()
+	listener, err := garlic.ListenTLS()
 	if err != nil {
 		t.Error(err)
 	}
@@ -31,11 +32,14 @@ func TestBareGarlic(t *testing.T) {
 	Sleep(15)
 	transport := http.Transport{
 		Dial: garlic.Dial,
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: true,
+		},
 	}
 	client := &http.Client{
 		Transport: &transport,
 	}
-	resp, err := client.Get("http://" + listener.Addr().String() + "/")
+	resp, err := client.Get("https://" + listener.Addr().String() + "/")
 	if err != nil {
 		t.Error(err)
 	}
@@ -46,6 +50,7 @@ func TestBareGarlic(t *testing.T) {
 		t.Error(err)
 	}
 	fmt.Println(string(body))
+	Sleep(5)
 }
 
 func Serve(listener net.Listener) {

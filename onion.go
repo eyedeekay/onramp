@@ -5,6 +5,7 @@ package onramp
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -98,6 +99,20 @@ func (o *Onion) getName() string {
 // address, and will automatically generate a keypair and store it.
 func (o *Onion) Listen() (net.Listener, error) {
 	return o.getTor().Listen(o.getContext(), o.getListenConf())
+}
+
+func (o *Onion) ListenTLS() (net.Listener, error) {
+	cert, err := o.TLSKeys()
+	if err != nil {
+		return nil, fmt.Errorf("onramp ListenTLS: %v", err)
+	}
+	l, err := o.getTor().Listen(o.getContext(), o.getListenConf())
+	return tls.NewListener(
+		l,
+		&tls.Config{
+			Certificates: []tls.Certificate{cert},
+		},
+	), nil
 }
 
 // Dial returns a net.Conn to the given onion address or clearnet address.
