@@ -62,6 +62,10 @@ objects instantiated by an app.
 CloseOnion closes the Onion at the given index. It does not affect Onion
 objects instantiated by an app.
 
+### func [CreateTLSCertificate](/tls.go#L20)
+
+`func CreateTLSCertificate(tlsHost string, tlsCert, tlsKey *string) error`
+
 ### func [DeleteGarlicKeys](/garlic.go#L159)
 
 `func DeleteGarlicKeys(tunName string) error`
@@ -159,6 +163,14 @@ and not instantiated by an app.
 ListenOnion returns a net.Listener for a onion structure's keys
 corresponding to a structure managed by the onramp library
 and not instantiated by an app.
+
+### func [NewTLSCertificate](/tls.go#L114)
+
+`func NewTLSCertificate(host string, priv *ecdsa.PrivateKey) ([]byte, error)`
+
+### func [NewTLSCertificateAltNames](/tls.go#L118)
+
+`func NewTLSCertificateAltNames(priv *ecdsa.PrivateKey, hosts ...string) ([]byte, error)`
 
 ### func [TorKeys](/onion.go#L135)
 

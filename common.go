@@ -32,16 +32,22 @@ func GetJoinedWD(dir string) (string, error) {
 
 var i2pdefault, i2pkserr = GetJoinedWD("i2pkeys")
 var tordefault, torkserr = GetJoinedWD("onionkeys")
+var tlsdefault, tlskserr = GetJoinedWD("tlskeys")
 
 // I2P_KEYSTORE_PATH is the place where I2P Keys will be saved.
-// it defaults to the directory "i2pkeys" current working directory
+// it defaults to the directory "i2pkeys" current working directory.
 // reference it by calling I2PKeystorePath() to check for errors
 var I2P_KEYSTORE_PATH = i2pdefault
 
 // ONION_KEYSTORE_PATH is the place where Onion Keys will be saved.
-// it defaults to the directory "onionkeys" current working directory
+// it defaults to the directory "onionkeys" current working directory.
 // reference it by calling OnionKeystorePath() to check for errors
 var ONION_KEYSTORE_PATH = tordefault
+
+// TLS_KEYSTORE_PATH is the place where TLS Keys will be saved.
+// it defaults to the directory "tlskeys" current working directory.
+// reference it by calling TLSKeystorePath() to check for errors
+var TLS_KEYSTORE_PATH = tlsdefault
 
 // I2PKeystorePath returns the path to the I2P Keystore. If the
 // path is not set, it returns the default path. If the path does
@@ -77,6 +83,24 @@ func TorKeystorePath() (string, error) {
 // DeleteTorKeyStore deletes the Onion Keystore.
 func DeleteTorKeyStore() error {
 	return os.RemoveAll(ONION_KEYSTORE_PATH)
+}
+
+// TLSKeystorePath returns the path to the TLS Keystore. If the
+// path is not set, it returns the default path. If the path does
+// not exist, it creates it.
+func TLSKeystorePath() (string, error) {
+	if _, err := os.Stat(TLS_KEYSTORE_PATH); err != nil {
+		err := os.MkdirAll(TLS_KEYSTORE_PATH, 0755)
+		if err != nil {
+			return "", err
+		}
+	}
+	return TLS_KEYSTORE_PATH, nil
+}
+
+// DeleteTLSKeyStore deletes the TLS Keystore.
+func DeleteTLSKeyStore() error {
+	return os.RemoveAll(TLS_KEYSTORE_PATH)
 }
 
 // Dial returns a connection for the given network and address.
