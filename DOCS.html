@@ -145,6 +145,17 @@
     </p>
     <h3>
       func
+      <a href="/tls.go#L20" rel="nofollow">
+        CreateTLSCertificate
+      </a>
+    </h3>
+    <p>
+      <code>
+        func CreateTLSCertificate(tlsHost string, tlsCert, tlsKey *string) error
+      </code>
+    </p>
+    <h3>
+      func
       <a href="/garlic.go#L159" rel="nofollow">
         DeleteGarlicKeys
       </a>
@@ -344,6 +355,28 @@
       ListenOnion returns a net.Listener for a onion structure’s keys
       corresponding to a structure managed by the onramp library
       and not instantiated by an app.
+    </p>
+    <h3>
+      func
+      <a href="/tls.go#L114" rel="nofollow">
+        NewTLSCertificate
+      </a>
+    </h3>
+    <p>
+      <code>
+        func NewTLSCertificate(host string, priv *ecdsa.PrivateKey) ([]byte, error)
+      </code>
+    </p>
+    <h3>
+      func
+      <a href="/tls.go#L118" rel="nofollow">
+        NewTLSCertificateAltNames
+      </a>
+    </h3>
+    <p>
+      <code>
+        func NewTLSCertificateAltNames(priv *ecdsa.PrivateKey, hosts ...string) ([]byte, error)
+      </code>
     </p>
     <h3>
       func
