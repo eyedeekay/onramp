@@ -7,6 +7,7 @@
     <meta name="description" content="onramp.git" />
     <meta name="keywords" content="main" />
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="showhider.css" />
   </head>
   <body>
     <div id="navbar">
@@ -45,22 +46,23 @@
       </div>
     </div>
     <h1>
-      <a href="/">
-        onramp
+      <a href="#onramp" rel="nofollow">
+        <span></span>
       </a>
+      onramp
     </h1>
     <p>
-      High-level, easy-to-use listeners and clients for I2P and onion URL’s from Go.
+      High-level, easy-to-use listeners and clients for I2P and onion URL&#39;s from Go.
       Provides only the most widely-used functions in a basic way. It expects nothing
       from the users, an otherwise empty instance of the structs will listen and dial
       I2P Streaming and Tor TCP sessions successfully.
     </p>
     <p>
-      In all cases, it assumes that keys are “persistent” in that they are managed
+      In all cases, it assumes that keys are &#34;persistent&#34; in that they are managed
       maintained between usages of the same application in the same configuration.
       This means that hidden services will maintain their identities, and that clients
-      will always have the same return addresses. If you don’t want this behavior,
-      make sure to delete the “keystore” when your app closes or when your application
+      will always have the same return addresses. If you don&#39;t want this behavior,
+      make sure to delete the &#34;keystore&#34; when your app closes or when your application
       needs to cycle keys by calling the
       <code>
         Garlic.DeleteKeys()
@@ -84,12 +86,18 @@
         </strong>
       </li>
     </ul>
+    <p>
+      STATUS: This project is maintained. I will respond to issues, pull requests, and feature requests within a few days.
+    </p>
     <h2>
+      <a href="#usage" rel="nofollow">
+        <span></span>
+      </a>
       Usage
     </h2>
     <p>
       Basic usage is designed to be very simple, import the package and instantiate
-      a struct and you’re ready to go.
+      a struct and you&#39;re ready to go.
     </p>
     <p>
       For more extensive examples, see:
@@ -98,6 +106,9 @@
       </a>
     </p>
     <h3>
+      <a href="#i2p-garlic-usage" rel="nofollow">
+        <span></span>
+      </a>
       I2P(Garlic) Usage:
     </h3>
     <p>
@@ -107,26 +118,31 @@
       </code>
       struct.
     </p>
-    <pre><code>
-package main
+    <div>
+      <pre>
+<span>package</span> <span>main</span>
 
-import (
-	&#34;log&#34;
+<span>import</span> <span>(</span>
+	<span>&#34;log&#34;</span>
 
-	&#34;github.com/eyedeekay/onramp&#34;
-)
+	<span>&#34;github.com/eyedeekay/onramp&#34;</span>
+<span>)</span>
 
-func main() {
-	garlic := &amp;onramp.Garlic{}
-	defer garlic.Close()
-	listener, err := garlic.Listen()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer listener.Close()
-}
-</code></pre>
+<span>func</span> <span>main</span><span>(</span><span>)</span> <span>{</span>
+	<span>garlic</span> <span>:=</span> <span>&amp;</span><span>onramp</span><span>.</span><span>Garlic</span><span>{</span><span>}</span>
+	<span>defer</span> <span>garlic</span><span>.</span><span>Close</span><span>(</span><span>)</span>
+	<span>listener</span><span>,</span> <span>err</span> <span>:=</span> <span>garlic</span><span>.</span><span>Listen</span><span>(</span><span>)</span>
+	<span>if</span> <span>err</span> <span>!=</span> <span>nil</span> <span>{</span>
+		<span>log</span><span>.</span><span>Fatal</span><span>(</span><span>err</span><span>)</span>
+	<span>}</span>
+	<span>defer</span> <span>listener</span><span>.</span><span>Close</span><span>(</span><span>)</span>
+<span>}</span>
+</pre>
+    </div>
     <h3>
+      <a href="#tor-onion-usage" rel="nofollow">
+        <span></span>
+      </a>
       Tor(Onion) Usage:
     </h3>
     <p>
@@ -136,25 +152,27 @@ func main() {
       </code>
       struct.
     </p>
-    <pre><code>
-package main
+    <div>
+      <pre>
+<span>package</span> <span>main</span>
 
-import (
-	&#34;log&#34;
+<span>import</span> <span>(</span>
+	<span>&#34;log&#34;</span>
 
-	&#34;github.com/eyedeekay/onramp&#34;
-)
+	<span>&#34;github.com/eyedeekay/onramp&#34;</span>
+<span>)</span>
 
-func main() {
-	onion := &amp;onramp.Onion{}
-	defer garlic.Close()
-	listener, err := onion.Listen()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer listener.Close()
-}
-</code></pre>
+<span>func</span> <span>main</span><span>(</span><span>)</span> <span>{</span>
+	<span>onion</span> <span>:=</span> <span>&amp;</span><span>onramp</span><span>.</span><span>Onion</span><span>{</span><span>}</span>
+	<span>defer</span> <span>garlic</span><span>.</span><span>Close</span><span>(</span><span>)</span>
+	<span>listener</span><span>,</span> <span>err</span> <span>:=</span> <span>onion</span><span>.</span><span>Listen</span><span>(</span><span>)</span>
+	<span>if</span> <span>err</span> <span>!=</span> <span>nil</span> <span>{</span>
+		<span>log</span><span>.</span><span>Fatal</span><span>(</span><span>err</span><span>)</span>
+	<span>}</span>
+	<span>defer</span> <span>listener</span><span>.</span><span>Close</span><span>(</span><span>)</span>
+<span>}</span>
+</pre>
+    </div>
     <div>
       <a href="#show">
         Show license
