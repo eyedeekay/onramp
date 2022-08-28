@@ -7,6 +7,7 @@
     <meta name="description" content="onramp.git" />
     <meta name="keywords" content="main" />
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="showhider.css" />
   </head>
   <body>
     <div id="navbar">
@@ -45,45 +46,65 @@
       </div>
     </div>
     <h1>
+      <a href="#onramp-i2p-and-tor-library" rel="nofollow">
+        <span></span>
+      </a>
       Onramp I2P and Tor Library
     </h1>
     <p>
       <a href="http://pkg.go.dev/." rel="nofollow">
-        <img src="https://img.shields.io/badge/pkg.go.dev-doc-blue" alt="GoDoc"/>
+        <img src="https://img.shields.io/badge/pkg.go.dev-doc-blue" alt="GoDoc">
       </a>
       <a href="https://goreportcard.com/report/." rel="nofollow">
-        <img src="https://goreportcard.com/badge/." alt="Go Report Card"/>
+        <img src="https://goreportcard.com/badge/." alt="Go Report Card">
       </a>
     </p>
     <h2>
+      <a href="#variables" rel="nofollow">
+        <span></span>
+      </a>
       Variables
     </h2>
     <p>
       I2P_KEYSTORE_PATH is the place where I2P Keys will be saved.
-      it defaults to the directory “i2pkeys” current working directory
+      it defaults to the directory &#34;i2pkeys&#34; current working directory
       reference it by calling I2PKeystorePath() to check for errors
     </p>
-    <pre><code>var I2P_KEYSTORE_PATH = i2pdefault
-</code></pre>
+    <div>
+      <pre>var I2P_KEYSTORE_PATH = i2pdefault
+</pre>
+    </div>
     <p>
       ONION_KEYSTORE_PATH is the place where Onion Keys will be saved.
-      it defaults to the directory “onionkeys” current working directory
+      it defaults to the directory &#34;onionkeys&#34; current working directory
       reference it by calling OnionKeystorePath() to check for errors
     </p>
-    <pre><code>var ONION_KEYSTORE_PATH = tordefault
-</code></pre>
-    <pre><code>var OPT_DEFAULTS = sam3.Options_Default
-</code></pre>
+    <div>
+      <pre>var ONION_KEYSTORE_PATH = tordefault
+</pre>
+    </div>
+    <div>
+      <pre>var OPT_DEFAULTS = sam3.Options_Default
+</pre>
+    </div>
     <p>
       SAM_ADDR is the default I2P SAM address. It can be overridden by the
       struct or by changing this variable.
     </p>
-    <pre><code>var SAM_ADDR = &#34;127.0.0.1:7656&#34;
-</code></pre>
+    <div>
+      <pre>var SAM_ADDR = &#34;127.0.0.1:7656&#34;
+</pre>
+    </div>
     <h2>
+      <a href="#functions" rel="nofollow">
+        <span></span>
+      </a>
       Functions
     </h2>
     <h3>
+      <a href="#func-closeallgarlic" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/garlic.go#L211" rel="nofollow">
         CloseAllGarlic
@@ -99,6 +120,9 @@
       affect objects instantiated by an app.
     </p>
     <h3>
+      <a href="#func-closeallonion" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/onion.go#L174" rel="nofollow">
         CloseAllOnion
@@ -114,6 +138,9 @@
       affect objects instantiated by an app.
     </p>
     <h3>
+      <a href="#func-closegarlic" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/garlic.go#L220" rel="nofollow">
         CloseGarlic
@@ -129,6 +156,9 @@
       objects instantiated by an app.
     </p>
     <h3>
+      <a href="#func-closeonion" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/onion.go#L183" rel="nofollow">
         CloseOnion
@@ -144,6 +174,9 @@
       objects instantiated by an app.
     </p>
     <h3>
+      <a href="#func-createtlscertificate" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/tls.go#L20" rel="nofollow">
         CreateTLSCertificate
@@ -155,6 +188,9 @@
       </code>
     </p>
     <h3>
+      <a href="#func-deletegarlickeys" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/garlic.go#L159" rel="nofollow">
         DeleteGarlicKeys
@@ -172,6 +208,9 @@
       address.
     </p>
     <h3>
+      <a href="#func-deletei2pkeystore" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/common.go#L60" rel="nofollow">
         DeleteI2PKeyStore
@@ -186,6 +225,9 @@
       DeleteI2PKeyStore deletes the I2P Keystore.
     </p>
     <h3>
+      <a href="#func-deleteonionkeys" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/onion.go#L216" rel="nofollow">
         DeleteOnionKeys
@@ -201,6 +243,9 @@
       keystore + tunName.
     </p>
     <h3>
+      <a href="#func-deletetorkeystore" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/common.go#L78" rel="nofollow">
         DeleteTorKeyStore
@@ -215,6 +260,9 @@
       DeleteTorKeyStore deletes the Onion Keystore.
     </p>
     <h3>
+      <a href="#func-dial" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/common.go#L85" rel="nofollow">
         Dial
@@ -231,6 +279,9 @@
       if the address ends in anything else, it returns a Tor connection.
     </p>
     <h3>
+      <a href="#func-dialgarlic" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/garlic.go#L246" rel="nofollow">
         DialGarlic
@@ -242,11 +293,14 @@
       </code>
     </p>
     <p>
-      DialGarlic returns a net.Conn for a garlic structure’s keys
+      DialGarlic returns a net.Conn for a garlic structure&#39;s keys
       corresponding to a structure managed by the onramp library
       and not instantiated by an app.
     </p>
     <h3>
+      <a href="#func-dialonion" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/onion.go#L205" rel="nofollow">
         DialOnion
@@ -258,11 +312,14 @@
       </code>
     </p>
     <p>
-      DialOnion returns a net.Conn for a onion structure’s keys
+      DialOnion returns a net.Conn for a onion structure&#39;s keys
       corresponding to a structure managed by the onramp library
       and not instantiated by an app.
     </p>
     <h3>
+      <a href="#func-getjoinedwd" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/common.go#L17" rel="nofollow">
         GetJoinedWD
@@ -277,6 +334,9 @@
       GetJoinedWD returns the working directory joined with the given path.
     </p>
     <h3>
+      <a href="#func-i2pkeys" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/garlic.go#L173" rel="nofollow">
         I2PKeys
@@ -292,6 +352,9 @@
       tunnel name. If none exist, they are created and stored.
     </p>
     <h3>
+      <a href="#func-i2pkeystorepath" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/common.go#L49" rel="nofollow">
         I2PKeystorePath
@@ -308,6 +371,9 @@
       not exist, it creates it.
     </p>
     <h3>
+      <a href="#func-listen" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/common.go#L101" rel="nofollow">
         Listen
@@ -322,9 +388,12 @@
       Listen returns a listener for the given network and address.
       if network is i2p or garlic, it returns an I2P listener.
       if network is tor or onion, it returns an Onion listener.
-      if keys ends with “.i2p”, it returns an I2P listener.
+      if keys ends with &#34;.i2p&#34;, it returns an I2P listener.
     </p>
     <h3>
+      <a href="#func-listengarlic" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/garlic.go#L234" rel="nofollow">
         ListenGarlic
@@ -336,11 +405,14 @@
       </code>
     </p>
     <p>
-      ListenGarlic returns a net.Listener for a garlic structure’s keys
+      ListenGarlic returns a net.Listener for a garlic structure&#39;s keys
       corresponding to a structure managed by the onramp library
       and not instantiated by an app.
     </p>
     <h3>
+      <a href="#func-listenonion" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/onion.go#L193" rel="nofollow">
         ListenOnion
@@ -352,11 +424,14 @@
       </code>
     </p>
     <p>
-      ListenOnion returns a net.Listener for a onion structure’s keys
+      ListenOnion returns a net.Listener for a onion structure&#39;s keys
       corresponding to a structure managed by the onramp library
       and not instantiated by an app.
     </p>
     <h3>
+      <a href="#func-newtlscertificate" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/tls.go#L114" rel="nofollow">
         NewTLSCertificate
@@ -368,6 +443,9 @@
       </code>
     </p>
     <h3>
+      <a href="#func-newtlscertificatealtnames" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/tls.go#L118" rel="nofollow">
         NewTLSCertificateAltNames
@@ -379,6 +457,9 @@
       </code>
     </p>
     <h3>
+      <a href="#func-torkeys" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/onion.go#L135" rel="nofollow">
         TorKeys
@@ -395,6 +476,9 @@
       returned. If it does not exist, it will be generated.
     </p>
     <h3>
+      <a href="#func-torkeystorepath" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/common.go#L67" rel="nofollow">
         TorKeystorePath
@@ -411,9 +495,15 @@
       not exist, it creates it.
     </p>
     <h2>
+      <a href="#types" rel="nofollow">
+        <span></span>
+      </a>
       Types
     </h2>
     <h3>
+      <a href="#type-garlic" rel="nofollow">
+        <span></span>
+      </a>
       type
       <a href="/garlic.go#L19" rel="nofollow">
         Garlic
@@ -429,6 +519,9 @@
       has a valid I2PKeys and StreamSession.
     </p>
     <h4>
+      <a href="#func-newgarlic" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/garlic.go#L140" rel="nofollow">
         NewGarlic
@@ -444,6 +537,9 @@
       I2P streaming.
     </p>
     <h4>
+      <a href="#func-garlic-close" rel="nofollow">
+        <span></span>
+      </a>
       func (*Garlic)
       <a href="/garlic.go#L111" rel="nofollow">
         Close
@@ -455,9 +551,12 @@
       </code>
     </p>
     <p>
-      Close closes the Garlic structure’s sessions and listeners.
+      Close closes the Garlic structure&#39;s sessions and listeners.
     </p>
     <h4>
+      <a href="#func-garlic-deletekeys" rel="nofollow">
+        <span></span>
+      </a>
       func (*Garlic)
       <a href="/garlic.go#L134" rel="nofollow">
         DeleteKeys
@@ -469,6 +568,9 @@
       </code>
     </p>
     <h4>
+      <a href="#func-garlic-dial" rel="nofollow">
+        <span></span>
+      </a>
       func (*Garlic)
       <a href="/garlic.go#L99" rel="nofollow">
         Dial
@@ -480,9 +582,12 @@
       </code>
     </p>
     <p>
-      Dial returns a net.Conn for the Garlic structure’s I2P keys.
+      Dial returns a net.Conn for the Garlic structure&#39;s I2P keys.
     </p>
     <h4>
+      <a href="#func-garlic-keys" rel="nofollow">
+        <span></span>
+      </a>
       func (*Garlic)
       <a href="/garlic.go#L126" rel="nofollow">
         Keys
@@ -498,6 +603,9 @@
       exist, they are created and stored.
     </p>
     <h4>
+      <a href="#func-garlic-listen" rel="nofollow">
+        <span></span>
+      </a>
       func (*Garlic)
       <a href="/garlic.go#L81" rel="nofollow">
         Listen
@@ -509,9 +617,12 @@
       </code>
     </p>
     <p>
-      Listen returns a net.Listener for the Garlic structure’s I2P keys.
+      Listen returns a net.Listener for the Garlic structure&#39;s I2P keys.
     </p>
     <h3>
+      <a href="#type-onion" rel="nofollow">
+        <span></span>
+      </a>
       type
       <a href="/onion.go#L24" rel="nofollow">
         Onion
@@ -528,6 +639,9 @@
       keys.
     </p>
     <h4>
+      <a href="#func-newonion" rel="nofollow">
+        <span></span>
+      </a>
       func
       <a href="/onion.go#L126" rel="nofollow">
         NewOnion
@@ -542,6 +656,9 @@
       NewOnion returns a new Onion object.
     </p>
     <h4>
+      <a href="#func-onion-close" rel="nofollow">
+        <span></span>
+      </a>
       func (*Onion)
       <a href="/onion.go#L109" rel="nofollow">
         Close
@@ -556,6 +673,9 @@
       Close closes the Onion Service and all associated resources.
     </p>
     <h4>
+      <a href="#func-onion-deletekeys" rel="nofollow">
+        <span></span>
+      </a>
       func (*Onion)
       <a href="/onion.go#L121" rel="nofollow">
         DeleteKeys
@@ -572,6 +692,9 @@
       address.
     </p>
     <h4>
+      <a href="#func-onion-dial" rel="nofollow">
+        <span></span>
+      </a>
       func (*Onion)
       <a href="/onion.go#L104" rel="nofollow">
         Dial
@@ -586,6 +709,9 @@
       Dial returns a net.Conn to the given onion address or clearnet address.
     </p>
     <h4>
+      <a href="#func-onion-keys" rel="nofollow">
+        <span></span>
+      </a>
       func (*Onion)
       <a href="/onion.go#L114" rel="nofollow">
         Keys
@@ -600,6 +726,9 @@
       Keys returns the keys for the Onion
     </p>
     <h4>
+      <a href="#func-onion-listen" rel="nofollow">
+        <span></span>
+      </a>
       func (*Onion)
       <a href="/onion.go#L99" rel="nofollow">
         Listen
@@ -614,7 +743,7 @@
       ListenOnion returns a net.Listener which will listen on an onion
       address, and will automatically generate a keypair and store it.
     </p>
-    <hr/>
+    <hr>
     <p>
       Readme created from Go doc with
       <a href="https://github.com/posener/goreadme" rel="nofollow">
