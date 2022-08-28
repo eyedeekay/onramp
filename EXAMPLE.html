@@ -7,6 +7,7 @@
     <meta name="description" content="onramp.git" />
     <meta name="keywords" content="main" />
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="showhider.css" />
   </head>
   <body>
     <div id="navbar">
@@ -45,195 +46,223 @@
       </div>
     </div>
     <h1>
+      <a href="#example-usage" rel="nofollow">
+        <span></span>
+      </a>
       Example Usage
     </h1>
     <h3>
+      <a href="#usage-as-instance-of-a-struct-listener" rel="nofollow">
+        <span></span>
+      </a>
       Usage as instance of a struct, Listener
     </h3>
-    <pre><code>
-package main
+    <div>
+      <pre>
+<span>package</span> <span>main</span>
 
-import (
-	&#34;fmt&#34;
-	&#34;log&#34;
-	&#34;net/http&#34;
+<span>import</span> <span>(</span>
+	<span>&#34;fmt&#34;</span>
+	<span>&#34;log&#34;</span>
+	<span>&#34;net/http&#34;</span>
 
-	&#34;github.com/eyedeekay/onramp&#34;
-)
+	<span>&#34;github.com/eyedeekay/onramp&#34;</span>
+<span>)</span>
 
-func main() {
-	garlic := &amp;onramp.Garlic{}
-	defer garlic.Close()
-	listener, err := garlic.Listen()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer listener.Close()
-	http.HandleFunc(&#34;/&#34;, func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, &#34;Hello, %q&#34;, r.URL.Path)
-	})
-	if err := http.Serve(listener, nil); err != nil {
-		log.Fatal(err)
-	}
-}
-</code></pre>
+<span>func</span> <span>main</span><span>(</span><span>)</span> <span>{</span>
+	<span>garlic</span> <span>:=</span> <span>&amp;</span><span>onramp</span><span>.</span><span>Garlic</span><span>{</span><span>}</span>
+	<span>defer</span> <span>garlic</span><span>.</span><span>Close</span><span>(</span><span>)</span>
+	<span>listener</span><span>,</span> <span>err</span> <span>:=</span> <span>garlic</span><span>.</span><span>Listen</span><span>(</span><span>)</span>
+	<span>if</span> <span>err</span> <span>!=</span> <span>nil</span> <span>{</span>
+		<span>log</span><span>.</span><span>Fatal</span><span>(</span><span>err</span><span>)</span>
+	<span>}</span>
+	<span>defer</span> <span>listener</span><span>.</span><span>Close</span><span>(</span><span>)</span>
+	<span>http</span><span>.</span><span>HandleFunc</span><span>(</span><span>&#34;/&#34;</span><span>,</span> <span>func</span><span>(</span><span>w</span> <span>http</span><span>.</span><span>ResponseWriter</span><span>,</span> <span>r</span> <span>*</span><span>http</span><span>.</span><span>Request</span><span>)</span> <span>{</span>
+		<span>fmt</span><span>.</span><span>Fprintf</span><span>(</span><span>w</span><span>,</span> <span>&#34;Hello, %q&#34;</span><span>,</span> <span>r</span><span>.</span><span>URL</span><span>.</span><span>Path</span><span>)</span>
+	<span>}</span><span>)</span>
+	<span>if</span> <span>err</span> <span>:=</span> <span>http</span><span>.</span><span>Serve</span><span>(</span><span>listener</span><span>,</span> <span>nil</span><span>)</span><span>;</span> <span>err</span> <span>!=</span> <span>nil</span> <span>{</span>
+		<span>log</span><span>.</span><span>Fatal</span><span>(</span><span>err</span><span>)</span>
+	<span>}</span>
+<span>}</span>
+</pre>
+    </div>
     <h3>
+      <a href="#usage-as-instance-of-a-struct-dialer" rel="nofollow">
+        <span></span>
+      </a>
       Usage as instance of a struct, Dialer
     </h3>
-    <pre><code>
-package main
+    <div>
+      <pre>
+<span>package</span> <span>main</span>
 
-import (
-	&#34;fmt&#34;
-	&#34;io/ioutil&#34;
-	&#34;log&#34;
-	&#34;net/http&#34;
+<span>import</span> <span>(</span>
+	<span>&#34;fmt&#34;</span>
+	<span>&#34;io/ioutil&#34;</span>
+	<span>&#34;log&#34;</span>
+	<span>&#34;net/http&#34;</span>
 
-	&#34;github.com/eyedeekay/onramp&#34;
-)
+	<span>&#34;github.com/eyedeekay/onramp&#34;</span>
+<span>)</span>
 
-func main() {
-	garlic := &amp;onramp.Garlic{}
-	defer garlic.Close()
-	transport := http.Transport{
-		Dial: garlic.Dial,
-	}
-	client := &amp;http.Client{
-		Transport: &amp;transport,
-	}
-	resp, err := client.Get(&#34;http://&#34; + listener.Addr().String() + &#34;/&#34;)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer resp.Body.Close()
-	fmt.Println(resp.Status)
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(body))
-}
+<span>func</span> <span>main</span><span>(</span><span>)</span> <span>{</span>
+	<span>garlic</span> <span>:=</span> <span>&amp;</span><span>onramp</span><span>.</span><span>Garlic</span><span>{</span><span>}</span>
+	<span>defer</span> <span>garlic</span><span>.</span><span>Close</span><span>(</span><span>)</span>
+	<span>transport</span> <span>:=</span> <span>http</span><span>.</span><span>Transport</span><span>{</span>
+		<span>Dial</span><span>:</span> <span>garlic</span><span>.</span><span>Dial</span><span>,</span>
+	<span>}</span>
+	<span>client</span> <span>:=</span> <span>&amp;</span><span>http</span><span>.</span><span>Client</span><span>{</span>
+		<span>Transport</span><span>:</span> <span>&amp;</span><span>transport</span><span>,</span>
+	<span>}</span>
+	<span>resp</span><span>,</span> <span>err</span> <span>:=</span> <span>client</span><span>.</span><span>Get</span><span>(</span><span>&#34;http://&#34;</span> <span>+</span> <span>listener</span><span>.</span><span>Addr</span><span>(</span><span>)</span><span>.</span><span>String</span><span>(</span><span>)</span> <span>+</span> <span>&#34;/&#34;</span><span>)</span>
+	<span>if</span> <span>err</span> <span>!=</span> <span>nil</span> <span>{</span>
+		<span>log</span><span>.</span><span>Fatal</span><span>(</span><span>err</span><span>)</span>
+	<span>}</span>
+	<span>defer</span> <span>resp</span><span>.</span><span>Body</span><span>.</span><span>Close</span><span>(</span><span>)</span>
+	<span>fmt</span><span>.</span><span>Println</span><span>(</span><span>resp</span><span>.</span><span>Status</span><span>)</span>
+	<span>body</span><span>,</span> <span>err</span> <span>:=</span> <span>ioutil</span><span>.</span><span>ReadAll</span><span>(</span><span>resp</span><span>.</span><span>Body</span><span>)</span>
+	<span>if</span> <span>err</span> <span>!=</span> <span>nil</span> <span>{</span>
+		<span>log</span><span>.</span><span>Fatal</span><span>(</span><span>err</span><span>)</span>
+	<span>}</span>
+	<span>fmt</span><span>.</span><span>Println</span><span>(</span><span>string</span><span>(</span><span>body</span><span>)</span><span>)</span>
+<span>}</span>
 
-</code></pre>
+</pre>
+    </div>
     <h3>
+      <a href="#usage-as-instance-of-a-struct-listener-and-dialer-on-same-address" rel="nofollow">
+        <span></span>
+      </a>
       Usage as instance of a struct, Listener and Dialer on same address
     </h3>
-    <pre><code>
-package main
+    <div>
+      <pre>
+<span>package</span> <span>main</span>
 
-import (
-	&#34;fmt&#34;
-	&#34;io/ioutil&#34;
-	&#34;log&#34;
-	&#34;net&#34;
-	&#34;net/http&#34;
-)
+<span>import</span> <span>(</span>
+	<span>&#34;fmt&#34;</span>
+	<span>&#34;io/ioutil&#34;</span>
+	<span>&#34;log&#34;</span>
+	<span>&#34;net&#34;</span>
+	<span>&#34;net/http&#34;</span>
+<span>)</span>
 
-func main() {
-	garlic := &amp;Garlic{}
-	defer garlic.Close()
-	listener, err := garlic.Listen()
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println(&#34;listener:&#34;, listener.Addr().String())
-	defer listener.Close()
-	http.HandleFunc(&#34;/&#34;, func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, &#34;Hello, %q&#34;, r.URL.Path)
-	})
-	go Serve(listener)
-	transport := http.Transport{
-		Dial: garlic.Dial,
-	}
-	client := &amp;http.Client{
-		Transport: &amp;transport,
-	}
-	resp, err := client.Get(&#34;http://&#34; + listener.Addr().String() + &#34;/&#34;)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer resp.Body.Close()
-	fmt.Println(resp.Status)
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(body))
-}
+<span>func</span> <span>main</span><span>(</span><span>)</span> <span>{</span>
+	<span>garlic</span> <span>:=</span> <span>&amp;</span><span>Garlic</span><span>{</span><span>}</span>
+	<span>defer</span> <span>garlic</span><span>.</span><span>Close</span><span>(</span><span>)</span>
+	<span>listener</span><span>,</span> <span>err</span> <span>:=</span> <span>garlic</span><span>.</span><span>Listen</span><span>(</span><span>)</span>
+	<span>if</span> <span>err</span> <span>!=</span> <span>nil</span> <span>{</span>
+		<span>log</span><span>.</span><span>Fatal</span><span>(</span><span>err</span><span>)</span>
+	<span>}</span>
+	<span>log</span><span>.</span><span>Println</span><span>(</span><span>&#34;listener:&#34;</span><span>,</span> <span>listener</span><span>.</span><span>Addr</span><span>(</span><span>)</span><span>.</span><span>String</span><span>(</span><span>)</span><span>)</span>
+	<span>defer</span> <span>listener</span><span>.</span><span>Close</span><span>(</span><span>)</span>
+	<span>http</span><span>.</span><span>HandleFunc</span><span>(</span><span>&#34;/&#34;</span><span>,</span> <span>func</span><span>(</span><span>w</span> <span>http</span><span>.</span><span>ResponseWriter</span><span>,</span> <span>r</span> <span>*</span><span>http</span><span>.</span><span>Request</span><span>)</span> <span>{</span>
+		<span>fmt</span><span>.</span><span>Fprintf</span><span>(</span><span>w</span><span>,</span> <span>&#34;Hello, %q&#34;</span><span>,</span> <span>r</span><span>.</span><span>URL</span><span>.</span><span>Path</span><span>)</span>
+	<span>}</span><span>)</span>
+	<span>go</span> <span>Serve</span><span>(</span><span>listener</span><span>)</span>
+	<span>transport</span> <span>:=</span> <span>http</span><span>.</span><span>Transport</span><span>{</span>
+		<span>Dial</span><span>:</span> <span>garlic</span><span>.</span><span>Dial</span><span>,</span>
+	<span>}</span>
+	<span>client</span> <span>:=</span> <span>&amp;</span><span>http</span><span>.</span><span>Client</span><span>{</span>
+		<span>Transport</span><span>:</span> <span>&amp;</span><span>transport</span><span>,</span>
+	<span>}</span>
+	<span>resp</span><span>,</span> <span>err</span> <span>:=</span> <span>client</span><span>.</span><span>Get</span><span>(</span><span>&#34;http://&#34;</span> <span>+</span> <span>listener</span><span>.</span><span>Addr</span><span>(</span><span>)</span><span>.</span><span>String</span><span>(</span><span>)</span> <span>+</span> <span>&#34;/&#34;</span><span>)</span>
+	<span>if</span> <span>err</span> <span>!=</span> <span>nil</span> <span>{</span>
+		<span>log</span><span>.</span><span>Fatal</span><span>(</span><span>err</span><span>)</span>
+	<span>}</span>
+	<span>defer</span> <span>resp</span><span>.</span><span>Body</span><span>.</span><span>Close</span><span>(</span><span>)</span>
+	<span>fmt</span><span>.</span><span>Println</span><span>(</span><span>resp</span><span>.</span><span>Status</span><span>)</span>
+	<span>body</span><span>,</span> <span>err</span> <span>:=</span> <span>ioutil</span><span>.</span><span>ReadAll</span><span>(</span><span>resp</span><span>.</span><span>Body</span><span>)</span>
+	<span>if</span> <span>err</span> <span>!=</span> <span>nil</span> <span>{</span>
+		<span>log</span><span>.</span><span>Fatal</span><span>(</span><span>err</span><span>)</span>
+	<span>}</span>
+	<span>fmt</span><span>.</span><span>Println</span><span>(</span><span>string</span><span>(</span><span>body</span><span>)</span><span>)</span>
+<span>}</span>
 
-func Serve(listener net.Listener) {
-	if err := http.Serve(listener, nil); err != nil {
-		log.Fatal(err)
-	}
-}
-</code></pre>
+<span>func</span> <span>Serve</span><span>(</span><span>listener</span> <span>net</span><span>.</span><span>Listener</span><span>)</span> <span>{</span>
+	<span>if</span> <span>err</span> <span>:=</span> <span>http</span><span>.</span><span>Serve</span><span>(</span><span>listener</span><span>,</span> <span>nil</span><span>)</span><span>;</span> <span>err</span> <span>!=</span> <span>nil</span> <span>{</span>
+		<span>log</span><span>.</span><span>Fatal</span><span>(</span><span>err</span><span>)</span>
+	<span>}</span>
+<span>}</span>
+</pre>
+    </div>
     <h3>
+      <a href="#usage-as-automatically-managed-listeners" rel="nofollow">
+        <span></span>
+      </a>
       Usage as automatically-managed Listeners
     </h3>
-    <pre><code>
-package main
+    <div>
+      <pre>
+<span>package</span> <span>main</span>
 
-import (
-	&#34;fmt&#34;
-	&#34;log&#34;
-	&#34;net/http&#34;
+<span>import</span> <span>(</span>
+	<span>&#34;fmt&#34;</span>
+	<span>&#34;log&#34;</span>
+	<span>&#34;net/http&#34;</span>
 
-	&#34;github.com/eyedeekay/onramp&#34;
-)
+	<span>&#34;github.com/eyedeekay/onramp&#34;</span>
+<span>)</span>
 
-func main() {
-	defer onramp.CloseAll()
-	listener, err := onramp.Listen(&#34;tcp&#34;, &#34;service.i2p&#34;)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer listener.Close()
-	http.HandleFunc(&#34;/&#34;, func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, &#34;Hello, %q&#34;, r.URL.Path)
-	})
-	if err := http.Serve(listener, nil); err != nil {
-		log.Fatal(err)
-	}
-}
+<span>func</span> <span>main</span><span>(</span><span>)</span> <span>{</span>
+	<span>defer</span> <span>onramp</span><span>.</span><span>CloseAll</span><span>(</span><span>)</span>
+	<span>listener</span><span>,</span> <span>err</span> <span>:=</span> <span>onramp</span><span>.</span><span>Listen</span><span>(</span><span>&#34;tcp&#34;</span><span>,</span> <span>&#34;service.i2p&#34;</span><span>)</span>
+	<span>if</span> <span>err</span> <span>!=</span> <span>nil</span> <span>{</span>
+		<span>log</span><span>.</span><span>Fatal</span><span>(</span><span>err</span><span>)</span>
+	<span>}</span>
+	<span>defer</span> <span>listener</span><span>.</span><span>Close</span><span>(</span><span>)</span>
+	<span>http</span><span>.</span><span>HandleFunc</span><span>(</span><span>&#34;/&#34;</span><span>,</span> <span>func</span><span>(</span><span>w</span> <span>http</span><span>.</span><span>ResponseWriter</span><span>,</span> <span>r</span> <span>*</span><span>http</span><span>.</span><span>Request</span><span>)</span> <span>{</span>
+		<span>fmt</span><span>.</span><span>Fprintf</span><span>(</span><span>w</span><span>,</span> <span>&#34;Hello, %q&#34;</span><span>,</span> <span>r</span><span>.</span><span>URL</span><span>.</span><span>Path</span><span>)</span>
+	<span>}</span><span>)</span>
+	<span>if</span> <span>err</span> <span>:=</span> <span>http</span><span>.</span><span>Serve</span><span>(</span><span>listener</span><span>,</span> <span>nil</span><span>)</span><span>;</span> <span>err</span> <span>!=</span> <span>nil</span> <span>{</span>
+		<span>log</span><span>.</span><span>Fatal</span><span>(</span><span>err</span><span>)</span>
+	<span>}</span>
+<span>}</span>
 
-</code></pre>
+</pre>
+    </div>
     <h3>
+      <a href="#usage-as-automatically-managed-dialers" rel="nofollow">
+        <span></span>
+      </a>
       Usage as automatically-managed Dialers
     </h3>
-    <pre><code>
-package main
+    <div>
+      <pre>
+<span>package</span> <span>main</span>
 
-import (
-	&#34;fmt&#34;
-	&#34;io/ioutil&#34;
-	&#34;log&#34;
-	&#34;net/http&#34;
+<span>import</span> <span>(</span>
+	<span>&#34;fmt&#34;</span>
+	<span>&#34;io/ioutil&#34;</span>
+	<span>&#34;log&#34;</span>
+	<span>&#34;net/http&#34;</span>
 
-	&#34;github.com/eyedeekay/onramp&#34;
-)
+	<span>&#34;github.com/eyedeekay/onramp&#34;</span>
+<span>)</span>
 
-func main() {
-	defer onramp.CloseAll()
-	transport := http.Transport{
-		Dial: onramp.Dial,
-	}
-	client := &amp;http.Client{
-		Transport: &amp;transport,
-	}
-	resp, err := client.Get(&#34;http://&#34; + listener.Addr().String() + &#34;/&#34;)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer resp.Body.Close()
-	fmt.Println(resp.Status)
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(body))
-}
+<span>func</span> <span>main</span><span>(</span><span>)</span> <span>{</span>
+	<span>defer</span> <span>onramp</span><span>.</span><span>CloseAll</span><span>(</span><span>)</span>
+	<span>transport</span> <span>:=</span> <span>http</span><span>.</span><span>Transport</span><span>{</span>
+		<span>Dial</span><span>:</span> <span>onramp</span><span>.</span><span>Dial</span><span>,</span>
+	<span>}</span>
+	<span>client</span> <span>:=</span> <span>&amp;</span><span>http</span><span>.</span><span>Client</span><span>{</span>
+		<span>Transport</span><span>:</span> <span>&amp;</span><span>transport</span><span>,</span>
+	<span>}</span>
+	<span>resp</span><span>,</span> <span>err</span> <span>:=</span> <span>client</span><span>.</span><span>Get</span><span>(</span><span>&#34;http://&#34;</span> <span>+</span> <span>listener</span><span>.</span><span>Addr</span><span>(</span><span>)</span><span>.</span><span>String</span><span>(</span><span>)</span> <span>+</span> <span>&#34;/&#34;</span><span>)</span>
+	<span>if</span> <span>err</span> <span>!=</span> <span>nil</span> <span>{</span>
+		<span>log</span><span>.</span><span>Fatal</span><span>(</span><span>err</span><span>)</span>
+	<span>}</span>
+	<span>defer</span> <span>resp</span><span>.</span><span>Body</span><span>.</span><span>Close</span><span>(</span><span>)</span>
+	<span>fmt</span><span>.</span><span>Println</span><span>(</span><span>resp</span><span>.</span><span>Status</span><span>)</span>
+	<span>body</span><span>,</span> <span>err</span> <span>:=</span> <span>ioutil</span><span>.</span><span>ReadAll</span><span>(</span><span>resp</span><span>.</span><span>Body</span><span>)</span>
+	<span>if</span> <span>err</span> <span>!=</span> <span>nil</span> <span>{</span>
+		<span>log</span><span>.</span><span>Fatal</span><span>(</span><span>err</span><span>)</span>
+	<span>}</span>
+	<span>fmt</span><span>.</span><span>Println</span><span>(</span><span>string</span><span>(</span><span>body</span><span>)</span><span>)</span>
+<span>}</span>
 
-</code></pre>
+</pre>
+    </div>
     <div>
       <a href="#show">
         Show license
