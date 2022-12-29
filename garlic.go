@@ -10,6 +10,7 @@ import (
 	"net"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/eyedeekay/i2pkeys"
 	"github.com/eyedeekay/sam3"
@@ -20,6 +21,7 @@ import (
 type Garlic struct {
 	*sam3.StreamListener
 	*sam3.StreamSession
+	*sam3.DatagramSession
 	i2pkeys.I2PKeys
 	*sam3.SAM
 	name string
@@ -78,6 +80,23 @@ func (g Garlic) setupStreamSession() (*sam3.StreamSession, error) {
 	return g.StreamSession, nil
 }
 
+func (g Garlic) setupDatagramSession() (*sam3.DatagramSession, error) {
+	if g.DatagramSession == nil {
+		var err error
+		g.I2PKeys, err = g.Keys()
+		if err != nil {
+			return nil, fmt.Errorf("onramp setupDatagramSession: %v", err)
+		}
+		log.Println("Creating datagram session with keys:", g.I2PKeys.Address.Base32())
+		g.DatagramSession, err = g.SAM.NewDatagramSession(g.getName(), g.I2PKeys, g.getOptions(), 0)
+		if err != nil {
+			return nil, fmt.Errorf("onramp setupDatagramSession: %v", err)
+		}
+		return g.DatagramSession, nil
+	}
+	return g.DatagramSession, nil
+}
+
 // Listen returns a net.Listener for the Garlic structure's I2P keys.
 func (g *Garlic) Listen() (net.Listener, error) {
 	var err error
@@ -94,6 +113,18 @@ func (g *Garlic) Listen() (net.Listener, error) {
 		}
 	}
 	return g.StreamListener, nil
+}
+
+// ListenPacket returns a net.PacketConn for the Garlic structure's I2P keys.
+func (g *Garlic) ListenPacket() (net.PacketConn, error) {
+	var err error
+	if g.SAM, err = g.samSession(); err != nil {
+		return nil, fmt.Errorf("onramp NewGarlic: %v", err)
+	}
+	if g.DatagramSession, err = g.setupDatagramSession(); err != nil {
+		return nil, fmt.Errorf("onramp Listen: %v", err)
+	}
+	return g.DatagramSession, nil
 }
 
 // ListenTLS returns a net.Listener for the Garlic structure's I2P keys,
@@ -127,6 +158,9 @@ func (g *Garlic) ListenTLS() (net.Listener, error) {
 
 // Dial returns a net.Conn for the Garlic structure's I2P keys.
 func (g *Garlic) Dial(net, addr string) (net.Conn, error) {
+	if !strings.Contains(addr, ".i2p") {
+		return &NullConn{}, nil
+	}
 	var err error
 	if g.SAM, err = g.samSession(); err != nil {
 		return nil, fmt.Errorf("onramp NewGarlic: %v", err)
