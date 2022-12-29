@@ -4,6 +4,7 @@
 package onramp
 
 import (
+	"context"
 	"crypto/tls"
 	"fmt"
 	"log"
@@ -169,6 +170,21 @@ func (g *Garlic) Dial(net, addr string) (net.Conn, error) {
 		return nil, fmt.Errorf("onramp Dial: %v", err)
 	}
 	return g.StreamSession.Dial(net, addr)
+}
+
+// DialContext returns a net.Conn for the Garlic structure's I2P keys.
+func (g *Garlic) DialContext(ctx context.Context, net, addr string) (net.Conn, error) {
+	if !strings.Contains(addr, ".i2p") {
+		return &NullConn{}, nil
+	}
+	var err error
+	if g.SAM, err = g.samSession(); err != nil {
+		return nil, fmt.Errorf("onramp NewGarlic: %v", err)
+	}
+	if g.StreamSession, err = g.setupStreamSession(); err != nil {
+		return nil, fmt.Errorf("onramp Dial: %v", err)
+	}
+	return g.StreamSession.DialContext(ctx, net, addr)
 }
 
 // Close closes the Garlic structure's sessions and listeners.
