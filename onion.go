@@ -95,13 +95,31 @@ func (o *Onion) getName() string {
 	return o.name
 }
 
-// ListenOnion returns a net.Listener which will listen on an onion
+// NewListener returns a net.Listener which will listen on an onion
 // address, and will automatically generate a keypair and store it.
-func (o *Onion) Listen() (net.Listener, error) {
+// the args are always ignored
+func (o *Onion) NewListener(n, addr string) (net.Listener, error) {
+	return o.Listen(n)
+}
+
+// Listen returns a net.Listener which will listen on an onion
+// address, and will automatically generate a keypair and store it.
+// the args are always ignored
+func (o *Onion) Listen(args ...string) (net.Listener, error) {
+	return o.OldListen(args...)
+}
+
+// OldListen returns a net.Listener which will listen on an onion
+// address, and will automatically generate a keypair and store it.
+// the args are always ignored
+func (o *Onion) OldListen(args ...string) (net.Listener, error) {
 	return o.getTor().Listen(o.getContext(), o.getListenConf())
 }
 
-func (o *Onion) ListenTLS() (net.Listener, error) {
+// ListenTLS returns a net.Listener which will apply TLS encryption
+// to the onion listener, which will not be decrypted until it reaches
+// the browser
+func (o *Onion) ListenTLS(args ...string) (net.Listener, error) {
 	cert, err := o.TLSKeys()
 	if err != nil {
 		return nil, fmt.Errorf("onramp ListenTLS: %v", err)

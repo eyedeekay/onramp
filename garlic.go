@@ -23,14 +23,62 @@ type Garlic struct {
 	*sam3.StreamListener
 	*sam3.StreamSession
 	*sam3.DatagramSession
-	i2pkeys.I2PKeys
+	ServiceKeys *i2pkeys.I2PKeys
 	*sam3.SAM
-	name string
-	addr string
-	opts []string
+	name        string
+	addr        string
+	opts        []string
+	AddrMode    int
+	TorrentMode bool
 }
 
+const (
+	DEST_BASE32           = 0
+	DEST_HASH             = 1
+	DEST_HASH_BYTES       = 2
+	DEST_BASE32_TRUNCATED = 3
+	DEST_BASE64           = 4
+	DEST_BASE64_BYTES     = 5
+)
+
 var OPT_DEFAULTS = sam3.Options_Default
+
+func (g *Garlic) Network() string {
+	if g.StreamListener != nil {
+		return "tcp"
+	} else {
+		return "udp"
+	}
+}
+
+func (g *Garlic) addrString(addr string) string {
+	if g.TorrentMode {
+		return addr + ".i2p"
+	}
+	return addr
+}
+
+func (g *Garlic) String() string {
+	var r string
+	switch g.AddrMode {
+	case DEST_HASH:
+		r = g.ServiceKeys.Address.DestHash().Hash()
+	case DEST_HASH_BYTES:
+		hash := g.ServiceKeys.Address.DestHash()
+		r = string(hash[:])
+	case DEST_BASE32_TRUNCATED:
+		r = strings.TrimSuffix(g.ServiceKeys.Address.Base32(), ".b32.i2p")
+	case DEST_BASE32:
+		r = g.ServiceKeys.Address.Base32()
+	case DEST_BASE64:
+		r = g.ServiceKeys.Address.Base64()
+	case DEST_BASE64_BYTES:
+		r = string(g.ServiceKeys.Address.Bytes())
+	default:
+		r = g.ServiceKeys.Address.DestHash().Hash()
+	}
+	return g.addrString(r) //r //strings.TrimLeft(strings.TrimRight(r, "\n"), "\n") //strings.TrimSpace(r)
+}
 
 func (g *Garlic) getName() string {
 	if g.name == "" {
@@ -64,15 +112,15 @@ func (g *Garlic) samSession() (*sam3.SAM, error) {
 	return g.SAM, nil
 }
 
-func (g Garlic) setupStreamSession() (*sam3.StreamSession, error) {
+func (g *Garlic) setupStreamSession() (*sam3.StreamSession, error) {
 	if g.StreamSession == nil {
 		var err error
-		g.I2PKeys, err = g.Keys()
+		g.ServiceKeys, err = g.Keys()
 		if err != nil {
 			return nil, fmt.Errorf("onramp setupStreamSession: %v", err)
 		}
-		log.Println("Creating stream session with keys:", g.I2PKeys.Address.Base32())
-		g.StreamSession, err = g.SAM.NewStreamSession(g.getName(), g.I2PKeys, g.getOptions())
+		log.Println("Creating stream session with keys:", g.ServiceKeys.Address.Base32())
+		g.StreamSession, err = g.SAM.NewStreamSession(g.getName(), *g.ServiceKeys, g.getOptions())
 		if err != nil {
 			return nil, fmt.Errorf("onramp setupStreamSession: %v", err)
 		}
@@ -81,15 +129,15 @@ func (g Garlic) setupStreamSession() (*sam3.StreamSession, error) {
 	return g.StreamSession, nil
 }
 
-func (g Garlic) setupDatagramSession() (*sam3.DatagramSession, error) {
+func (g *Garlic) setupDatagramSession() (*sam3.DatagramSession, error) {
 	if g.DatagramSession == nil {
 		var err error
-		g.I2PKeys, err = g.Keys()
+		g.ServiceKeys, err = g.Keys()
 		if err != nil {
 			return nil, fmt.Errorf("onramp setupDatagramSession: %v", err)
 		}
-		log.Println("Creating datagram session with keys:", g.I2PKeys.Address.Base32())
-		g.DatagramSession, err = g.SAM.NewDatagramSession(g.getName(), g.I2PKeys, g.getOptions(), 0)
+		log.Println("Creating datagram session with keys:", g.ServiceKeys.Address.Base32())
+		g.DatagramSession, err = g.SAM.NewDatagramSession(g.getName(), *g.ServiceKeys, g.getOptions(), 0)
 		if err != nil {
 			return nil, fmt.Errorf("onramp setupDatagramSession: %v", err)
 		}
@@ -98,8 +146,38 @@ func (g Garlic) setupDatagramSession() (*sam3.DatagramSession, error) {
 	return g.DatagramSession, nil
 }
 
+// NewListener returns a net.Listener for the Garlic structure's I2P keys.
+// accepts a variable list of arguments, arguments after the first one are ignored.
+func (g *Garlic) NewListener(n, addr string) (net.Listener, error) {
+	return g.Listen(n)
+}
+
 // Listen returns a net.Listener for the Garlic structure's I2P keys.
-func (g *Garlic) Listen() (net.Listener, error) {
+// accepts a variable list of arguments, arguments after the first one are ignored.
+func (g *Garlic) Listen(args ...string) (net.Listener, error) {
+	return g.OldListen(args...)
+}
+
+// OldListen returns a net.Listener for the Garlic structure's I2P keys.
+// accepts a variable list of arguments, arguments after the first one are ignored.
+func (g *Garlic) OldListen(args ...string) (net.Listener, error) {
+	if len(args) > 0 {
+		if args[0] == "tcp" || args[0] == "tcp6" || args[0] == "st" || args[0] == "st6" {
+			return g.ListenStream()
+		} else if args[0] == "udp" || args[0] == "udp6" || args[0] == "dg" || args[0] == "dg6" {
+			pk, err := g.ListenPacket()
+			if err != nil {
+				return nil, err
+			}
+			return pk.(*sam3.DatagramSession), nil
+		}
+
+	}
+	return g.ListenStream()
+}
+
+// Listen returns a net.Listener for the Garlic structure's I2P keys.
+func (g *Garlic) ListenStream() (net.Listener, error) {
 	var err error
 	if g.SAM, err = g.samSession(); err != nil {
 		return nil, fmt.Errorf("onramp NewGarlic: %v", err)
@@ -131,23 +209,34 @@ func (g *Garlic) ListenPacket() (net.PacketConn, error) {
 // ListenTLS returns a net.Listener for the Garlic structure's I2P keys,
 // which also uses TLS either for additional encryption, authentication,
 // or browser-compatibility.
-func (g *Garlic) ListenTLS() (net.Listener, error) {
-	var err error
-	if g.SAM, err = g.samSession(); err != nil {
-		return nil, fmt.Errorf("onramp NewGarlic: %v", err)
-	}
-	if g.StreamSession, err = g.setupStreamSession(); err != nil {
-		return nil, fmt.Errorf("onramp Listen: %v", err)
-	}
-	if g.StreamListener == nil {
-		g.StreamListener, err = g.StreamSession.Listen()
-		if err != nil {
-			return nil, fmt.Errorf("onramp Listen: %v", err)
-		}
+func (g *Garlic) ListenTLS(args ...string) (net.Listener, error) {
+	listener, err := g.Listen(args...)
+	if err != nil {
+		return nil, err
 	}
 	cert, err := g.TLSKeys()
 	if err != nil {
 		return nil, fmt.Errorf("onramp ListenTLS: %v", err)
+	}
+	if len(args) > 0 {
+		if args[0] == "tcp" || args[0] == "tcp6" || args[0] == "st" || args[0] == "st6" {
+			return tls.NewListener(
+				g.StreamListener,
+				&tls.Config{
+					Certificates: []tls.Certificate{cert},
+				},
+			), nil
+		} else if args[0] == "udp" || args[0] == "udp6" || args[0] == "dg" || args[0] == "dg6" {
+			return tls.NewListener(
+				g.DatagramSession,
+				&tls.Config{
+					Certificates: []tls.Certificate{cert},
+				},
+			), nil
+		}
+
+	} else {
+		g.StreamListener = listener.(*sam3.StreamListener)
 	}
 	return tls.NewListener(
 		g.StreamListener,
@@ -203,12 +292,12 @@ func (g *Garlic) Close() error {
 
 // Keys returns the I2PKeys for the Garlic structure. If none
 // exist, they are created and stored.
-func (g *Garlic) Keys() (i2pkeys.I2PKeys, error) {
+func (g *Garlic) Keys() (*i2pkeys.I2PKeys, error) {
 	keys, err := I2PKeys(g.getName(), g.getAddr())
 	if err != nil {
-		return i2pkeys.I2PKeys{}, fmt.Errorf("onramp Keys: %v", err)
+		return &i2pkeys.I2PKeys{}, fmt.Errorf("onramp Keys: %v", err)
 	}
-	return keys, nil
+	return &keys, nil
 }
 
 func (g *Garlic) DeleteKeys() error {
