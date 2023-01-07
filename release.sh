@@ -2,9 +2,9 @@
 
 GITHUB_USER=eyedeekay
 GITHUB_REPO=onramp
-GITHUB_NAME="Initial Release"
+GITHUB_NAME="Expands the utility of various interfaces"
 GITHUB_DESCRIPTION=$(cat DESC.md)
-GITHUB_TAG=0.0.2
+GITHUB_TAG=0.0.3
 
 github-release release --user "${GITHUB_USER}" \
     --repo "${GITHUB_REPO}" \
