@@ -90,7 +90,7 @@ func (o *Onion) getDialer() *tor.Dialer {
 
 func (o *Onion) getName() string {
 	if o.name == "" {
-		o.name = "onramp"
+		o.name = "onramp-onion"
 	}
 	return o.name
 }

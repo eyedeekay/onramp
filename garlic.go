@@ -41,8 +41,6 @@ const (
 	DEST_BASE64_BYTES     = 5
 )
 
-var OPT_DEFAULTS = sam3.Options_Default
-
 func (g *Garlic) Network() string {
 	if g.StreamListener != nil {
 		return "tcp"
@@ -82,7 +80,7 @@ func (g *Garlic) String() string {
 
 func (g *Garlic) getName() string {
 	if g.name == "" {
-		return "onramp"
+		return "onramp-garlic"
 	}
 	return g.name
 }
