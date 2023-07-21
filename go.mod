@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/cretz/bine v0.2.0
 	github.com/eyedeekay/i2pkeys v0.33.0
-	github.com/eyedeekay/sam3 v0.33.5
+	github.com/eyedeekay/sam3 v0.33.6
 	github.com/libp2p/go-libp2p v0.28.1
 	github.com/multiformats/go-multiaddr v0.9.0
 )
@@ -15,6 +15,7 @@ require (
 	github.com/ipfs/go-cid v0.4.1 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.5 // indirect
 	github.com/libp2p/go-buffer-pool v0.1.0 // indirect
+	github.com/libp2p/go-yamux/v4 v4.0.0 // indirect
 	github.com/minio/sha256-simd v1.0.1 // indirect
 	github.com/mr-tron/base58 v1.2.0 // indirect
 	github.com/multiformats/go-base32 v0.1.0 // indirect

@@ -4,8 +4,10 @@ import (
 	"context"
 	"net"
 
+	"github.com/libp2p/go-libp2p/core/network"
 	"github.com/libp2p/go-libp2p/core/peer"
 	"github.com/libp2p/go-libp2p/core/transport"
+	"github.com/libp2p/go-libp2p/p2p/muxer/yamux"
 	ma "github.com/multiformats/go-multiaddr"
 )
 
@@ -53,11 +55,17 @@ type CapableConn interface {
 
 type GarlicConn struct {
 	net.Conn
+	net.Listener
+	multiplexer *yamux.Session
 	Garlic
+	string
 }
 
 func (g *GarlicConn) Dial(ctx context.Context, raddr ma.Multiaddr, p peer.ID) (transport.CapableConn, error) {
 	addr, err := raddr.ValueForProtocol(ma.P_GARLIC32)
+	if err != nil {
+		return nil, err
+	}
 	g.Conn, err = g.Garlic.DialContext(ctx, "tcp", addr)
 	if err != nil {
 		return nil, err
@@ -65,8 +73,13 @@ func (g *GarlicConn) Dial(ctx context.Context, raddr ma.Multiaddr, p peer.ID) (t
 	return g, nil
 }
 
-func (g *GarlicConn) AcceptStream() (network.MuxedStream, error)
-	// TODO:
+func (g *GarlicConn) AcceptStream() (network.MuxedStream, error) {
+	stream, err := g.Listener.Accept()
+	if err != nil {
+		return nil, err
+	}
+	muxedStream := g.multiplexer.Multiplex(stream)
+	return muxedStream, nil
 }
 
 // GarlicP2P Implements the Transport interface from libp2p by wrapping a GarlicConn struct
