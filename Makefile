@@ -1,13 +1,14 @@
 
 USER_GH=eyedeekay
-VERSION=0.33.7
+VERSION=0.33.8
+CREDIT='contributors to this release: @hkh4n, @eyedeekay'
 packagename=onramp
 
 echo: fmt
 	@echo "type make version to do release $(VERSION)"
 
 version:
-	github-release release -s $(GITHUB_TOKEN) -u $(USER_GH) -r $(packagename) -t v$(VERSION) -d "version $(VERSION)"
+	github-release release -s $(GITHUB_TOKEN) -u $(USER_GH) -r $(packagename) -t v$(VERSION) -d "version $(VERSION) $(CREDIT)"
 
 del:
 	github-release delete -s $(GITHUB_TOKEN) -u $(USER_GH) -r $(packagename) -t v$(VERSION)
