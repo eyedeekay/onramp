@@ -17,7 +17,10 @@ import (
 func TestBareGarlic(t *testing.T) {
 	fmt.Println("TestBareGarlic Countdown")
 	Sleep(5)
-	garlic := &Garlic{}
+	garlic, err := NewGarlic("test123", "localhost:7656", OPT_WIDE)
+	if err != nil {
+		t.Error(err)
+	}
 	defer garlic.Close()
 	listener, err := garlic.ListenTLS()
 	if err != nil {
@@ -29,9 +32,14 @@ func TestBareGarlic(t *testing.T) {
 		fmt.Fprintf(w, "Hello, %q", r.URL.Path)
 	})
 	go Serve(listener)
-	Sleep(15)
+	garlic2, err := NewGarlic("test321", "localhost:7656", OPT_WIDE)
+	if err != nil {
+		t.Error(err)
+	}
+	defer garlic2.Close()
+	Sleep(60)
 	transport := http.Transport{
-		Dial: garlic.Dial,
+		Dial: garlic2.Dial,
 		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: true,
 		},

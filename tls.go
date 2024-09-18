@@ -40,7 +40,7 @@ func (o *Onion) TLSKeys() (tls.Certificate, error) {
 	if err != nil {
 		return tls.Certificate{}, err
 	}
-	onionService := torutil.OnionServiceIDFromPrivateKey(keys.PrivateKey)
+	onionService := torutil.OnionServiceIDFromPrivateKey(keys)
 	return TLSKeys(onionService)
 }
 

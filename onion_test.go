@@ -15,7 +15,10 @@ import (
 func TestBareOnion(t *testing.T) {
 	fmt.Println("TestBareOnion Countdown")
 	Sleep(5)
-	onion := &Onion{}
+	onion, err := NewOnion("test123")
+	if err != nil {
+		t.Error(err)
+	}
 	defer onion.Close()
 	listener, err := onion.ListenTLS()
 	if err != nil {
@@ -27,7 +30,7 @@ func TestBareOnion(t *testing.T) {
 		fmt.Fprintf(w, "Hello, %q", r.URL.Path)
 	})
 	go Serve(listener)
-	Sleep(15)
+	Sleep(60)
 	transport := http.Transport{
 		Dial: onion.Dial,
 		TLSClientConfig: &tls.Config{
