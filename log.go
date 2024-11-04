@@ -2,7 +2,7 @@ package onramp
 
 import (
 	"github.com/sirupsen/logrus"
-	"io/ioutil"
+	"io"
 	"os"
 	"strings"
 	"sync"
@@ -17,7 +17,7 @@ func InitializeOnrampLogger() {
 	once.Do(func() {
 		log = logrus.New()
 		// We do not want to log by default
-		log.SetOutput(ioutil.Discard)
+		log.SetOutput(io.Discard)
 		log.SetLevel(logrus.PanicLevel)
 		// Check if DEBUG_I2P is set
 		if logLevel := os.Getenv("DEBUG_I2P"); logLevel != "" {
