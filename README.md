@@ -77,3 +77,31 @@ func main() {
 	defer listener.Close()
 }
 ```
+
+## Verbosity ##
+Logging can be enabled and configured using the DEBUG_I2P environment variable. By default, logging is disabled.
+
+There are three available log levels:
+
+- Debug
+```shell
+export DEBUG_I2P=debug
+```
+- Warn
+```shell
+export DEBUG_I2P=warn
+```
+- Error
+```shell
+export DEBUG_I2P=error
+```
+
+If DEBUG_I2P is set to an unrecognized variable, it will fall back to "debug".
+
+## Contributing
+
+See CONTRIBUTING.md for more information.
+
+## License
+
+This project is licensed under the MIT license, see LICENSE for more information.
