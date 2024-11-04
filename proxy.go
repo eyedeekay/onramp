@@ -1,8 +1,8 @@
 package onramp
 
 import (
+	"github.com/sirupsen/logrus"
 	"io"
-	"log"
 	"net"
 	"strings"
 )
@@ -21,30 +21,59 @@ type OnrampProxy struct {
 // and an I2P or Onion address, and it will act as a tunnel to a
 // listening hidden service somewhere.
 func (p *OnrampProxy) Proxy(list net.Listener, raddr string) error {
+	log.WithFields(logrus.Fields{
+		"remote_address": raddr,
+		"local_address":  list.Addr().String(),
+	}).Debug("Starting proxy service")
+
 	for {
+		log.Debug("Waiting for incoming connection")
 		conn, err := list.Accept()
 		if err != nil {
+			log.WithError(err).Error("Failed to accept connection")
 			return err
 		}
+
+		log.WithFields(logrus.Fields{
+			"local_addr":  conn.LocalAddr().String(),
+			"remote_addr": conn.RemoteAddr().String(),
+		}).Debug("Accepted new connection, starting proxy routine")
+
 		go p.proxy(conn, raddr)
 	}
 }
 
 func (p *OnrampProxy) proxy(conn net.Conn, raddr string) {
+	log.WithFields(logrus.Fields{
+		"remote_address": raddr,
+		"local_addr":     conn.LocalAddr().String(),
+		"remote_addr":    conn.RemoteAddr().String(),
+	}).Debug("Setting up proxy connection")
+
 	var remote net.Conn
 	var err error
 	checkaddr := strings.Split(raddr, ":")[0]
 	if strings.HasSuffix(checkaddr, ".i2p") {
+		log.Debug("Detected I2P address, using Garlic connection")
 		remote, err = p.Garlic.Dial("tcp", raddr)
 	} else if strings.HasSuffix(checkaddr, ".onion") {
+		log.Debug("Detected Onion address, using Tor connection")
 		remote, err = p.Onion.Dial("tcp", raddr)
 	} else {
+		log.Debug("Using standard TCP connection")
 		remote, err = net.Dial("tcp", raddr)
 	}
 	if err != nil {
-		log.Fatalf("cannot dial to remote: %v", err)
+		log.WithError(err).Error("Failed to establish remote connection")
+		log.Fatal("Cannot dial to remote")
 	}
 	defer remote.Close()
+
+	log.WithFields(logrus.Fields{
+		"local_addr":  remote.LocalAddr().String(),
+		"remote_addr": remote.RemoteAddr().String(),
+	}).Debug("Remote connection established, starting bidirectional copy")
+
 	go io.Copy(remote, conn)
 	io.Copy(conn, remote)
 }
