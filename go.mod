@@ -1,4 +1,4 @@
-module github.com/eyedeekay/onramp
+module github.com/go-i2p/onramp
 
 go 1.18
 
