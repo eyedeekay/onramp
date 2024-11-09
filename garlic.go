@@ -13,8 +13,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/eyedeekay/i2pkeys"
-	"github.com/eyedeekay/sam3"
+	"github.com/go-i2p/i2pkeys"
+	"github.com/go-i2p/sam3"
 )
 
 // Garlic is a ready-made I2P streaming manager. Once initialized it always

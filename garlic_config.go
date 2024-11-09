@@ -1,6 +1,6 @@
 package onramp
 
-import "github.com/eyedeekay/sam3"
+import "github.com/go-i2p/sam3"
 
 var OPT_DEFAULTS = sam3.Options_Default
 var OPT_WIDE = sam3.Options_Wide
