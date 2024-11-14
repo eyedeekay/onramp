@@ -1,6 +1,8 @@
 onramp
 ======
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/go-i2p/onramp)](https://goreportcard.com/report/github.com/go-i2p/onramp)
+
 High-level, easy-to-use listeners and clients for I2P and onion URL's from Go.
 Provides only the most widely-used functions in a basic way. It expects nothing
 from the users, an otherwise empty instance of the structs will listen and dial
@@ -12,9 +14,9 @@ This means that hidden services will maintain their identities, and that clients
 will always have the same return addresses. If you don't want this behavior,
 make sure to delete the "keystore" when your app closes or when your application
 needs to cycle keys by calling the `Garlic.DeleteKeys()` or `Onion.DeleteKeys()`
-function. For more information, check out the [godoc](http://pkg.go.dev/github.com/eyedeekay/onramp).
+function. For more information, check out the [godoc](http://pkg.go.dev/github.com/go-i2p/onramp).
 
-- **[Source Code](https://github.com/eyedeekay/onramp)**
+- **[Source Code](https://github.com/go-i2p/onramp)**
 
 STATUS: This project is maintained. I will respond to issues, pull requests, and feature requests within a few days.
 
@@ -38,7 +40,7 @@ package main
 import (
 	"log"
 
-	"github.com/eyedeekay/onramp"
+	"github.com/go-i2p/onramp"
 )
 
 func main() {
@@ -64,7 +66,7 @@ package main
 import (
 	"log"
 
-	"github.com/eyedeekay/onramp"
+	"github.com/go-i2p/onramp"
 )
 
 func main() {

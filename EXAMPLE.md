@@ -12,7 +12,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/eyedeekay/onramp"
+	"github.com/go-i2p/onramp"
 )
 
 func main() {
@@ -44,7 +44,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/eyedeekay/onramp"
+	"github.com/go-i2p/onramp"
 )
 
 func main() {
@@ -135,7 +135,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/eyedeekay/onramp"
+	"github.com/go-i2p/onramp"
 )
 
 func main() {
@@ -167,7 +167,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/eyedeekay/onramp"
+	"github.com/go-i2p/onramp"
 )
 
 func main() {
