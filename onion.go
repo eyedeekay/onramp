@@ -7,10 +7,11 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"net"
 	"os"
 	"path/filepath"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/cretz/bine/tor"
 	"github.com/cretz/bine/torutil/ed25519"
@@ -70,7 +71,7 @@ func (o *Onion) getTor() *tor.Tor {
 		torp, err = tor.Start(o.getContext(), o.getStartConf())
 		if err != nil {
 			log.WithError(err).Error("Failed to start Tor")
-			panic(err) //return nil instead?
+			panic(err) // return nil instead?
 		}
 		log.Debug("Tor instance started successfully")
 	}
@@ -78,9 +79,9 @@ func (o *Onion) getTor() *tor.Tor {
 }
 
 func (o *Onion) getDialer() *tor.Dialer {
-	//if o.Dialer == nil {
-	//var err error
-	//o.Dialer, err
+	// if o.Dialer == nil {
+	// var err error
+	// o.Dialer, err
 	log.Debug("Creating new Tor dialer")
 	dialer, err := o.getTor().Dialer(o.getContext(), o.getDialConf())
 	if err != nil {
@@ -123,7 +124,7 @@ func (o *Onion) Listen(args ...string) (net.Listener, error) {
 
 	log.Debug("Successfully created Onion listener")
 	return listener, nil
-	//return o.OldListen(args...)
+	// return o.OldListen(args...)
 }
 
 // OldListen returns a net.Listener which will listen on an onion
@@ -140,7 +141,7 @@ func (o *Onion) OldListen(args ...string) (net.Listener, error) {
 
 	log.Debug("Successfully created Tor listener")
 	return listener, nil
-	//return o.getTor().Listen(o.getContext(), o.getListenConf())
+	// return o.getTor().Listen(o.getContext(), o.getListenConf())
 }
 
 // ListenTLS returns a net.Listener which will apply TLS encryption
@@ -182,7 +183,7 @@ func (o *Onion) Dial(net, addr string) (net.Conn, error) {
 
 	log.Debug("Successfully established Tor connection")
 	return conn, nil
-	//return o.getDialer().DialContext(o.getContext(), net, addr)
+	// return o.getDialer().DialContext(o.getContext(), net, addr)
 }
 
 // Close closes the Onion Service and all associated resources.
@@ -197,7 +198,7 @@ func (o *Onion) Close() error {
 
 	log.Debug("Successfully closed Onion service")
 	return nil
-	//return o.getTor().Close()
+	// return o.getTor().Close()
 }
 
 // Keys returns the keys for the Onion
@@ -212,7 +213,7 @@ func (o *Onion) Keys() (ed25519.KeyPair, error) {
 
 	log.Debug("Successfully retrieved Onion keys")
 	return keys, nil
-	//return TorKeys(o.getName())
+	// return TorKeys(o.getName())
 }
 
 // DeleteKeys deletes the keys at the given key name in the key store.
@@ -343,7 +344,7 @@ func ListenOnion(network, keys string) (net.Listener, error) {
 
 	log.Debug("Successfully created Onion listener")
 	return listener, nil
-	//return g.Listen()
+	// return g.Listen()
 }
 
 // DialOnion returns a net.Conn for a onion structure's keys

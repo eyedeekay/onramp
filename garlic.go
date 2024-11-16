@@ -7,11 +7,12 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"net"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/go-i2p/i2pkeys"
 	"github.com/go-i2p/sam3"
@@ -75,7 +76,7 @@ func (g *Garlic) String() string {
 	default:
 		r = g.ServiceKeys.Address.DestHash().Hash()
 	}
-	return g.addrString(r) //r //strings.TrimLeft(strings.TrimRight(r, "\n"), "\n") //strings.TrimSpace(r)
+	return g.addrString(r) // r //strings.TrimLeft(strings.TrimRight(r, "\n"), "\n") //strings.TrimSpace(r)
 }
 
 func (g *Garlic) getName() string {
@@ -175,7 +176,7 @@ func (g *Garlic) NewListener(n, addr string) (net.Listener, error) {
 
 	log.Debug("Successfully created listener")
 	return listener, nil
-	//return g.Listen(n)
+	// return g.Listen(n)
 }
 
 // Listen returns a net.Listener for the Garlic structure's I2P keys.
@@ -194,7 +195,7 @@ func (g *Garlic) Listen(args ...string) (net.Listener, error) {
 
 	log.Debug("Successfully created listener")
 	return listener, nil
-	//return g.OldListen(args...)
+	// return g.OldListen(args...)
 }
 
 // OldListen returns a net.Listener for the Garlic structure's I2P keys.
@@ -204,7 +205,7 @@ func (g *Garlic) OldListen(args ...string) (net.Listener, error) {
 	if len(args) > 0 {
 		protocol := args[0]
 		log.WithField("protocol", protocol).Debug("Checking protocol type")
-		//if args[0] == "tcp" || args[0] == "tcp6" || args[0] == "st" || args[0] == "st6" {
+		// if args[0] == "tcp" || args[0] == "tcp6" || args[0] == "st" || args[0] == "st6" {
 		if protocol == "tcp" || protocol == "tcp6" || protocol == "st" || protocol == "st6" {
 			log.Debug("Using TCP stream listener")
 			return g.ListenStream()
@@ -284,7 +285,7 @@ func (g *Garlic) ListenTLS(args ...string) (net.Listener, error) {
 		protocol := args[0]
 		log.WithField("protocol", protocol).Debug("Creating TLS listener for protocol")
 
-		//if args[0] == "tcp" || args[0] == "tcp6" || args[0] == "st" || args[0] == "st6" {
+		// if args[0] == "tcp" || args[0] == "tcp6" || args[0] == "st" || args[0] == "st6" {
 		if protocol == "tcp" || protocol == "tcp6" || protocol == "st" || protocol == "st6" {
 			log.Debug("Creating TLS stream listener")
 			return tls.NewListener(
@@ -344,7 +345,7 @@ func (g *Garlic) Dial(net, addr string) (net.Conn, error) {
 	}
 	log.Debug("Successfully established connection")
 	return conn, nil
-	//return g.StreamSession.Dial(net, addr)
+	// return g.StreamSession.Dial(net, addr)
 }
 
 // DialContext returns a net.Conn for the Garlic structure's I2P keys.
@@ -375,7 +376,7 @@ func (g *Garlic) DialContext(ctx context.Context, net, addr string) (net.Conn, e
 
 	log.Debug("Successfully established connection")
 	return conn, nil
-	//return g.StreamSession.DialContext(ctx, net, addr)
+	// return g.StreamSession.DialContext(ctx, net, addr)
 }
 
 // Close closes the Garlic structure's sessions and listeners.
@@ -422,7 +423,7 @@ func (g *Garlic) Keys() (*i2pkeys.I2PKeys, error) {
 }
 
 func (g *Garlic) DeleteKeys() error {
-	//return DeleteGarlicKeys(g.getName())
+	// return DeleteGarlicKeys(g.getName())
 	log.WithField("name", g.getName()).Debug("Attempting to delete Garlic keys")
 	err := DeleteGarlicKeys(g.getName())
 	if err != nil {
@@ -561,7 +562,7 @@ func CloseGarlic(tunName string) {
 	g, ok := garlics[tunName]
 	if ok {
 		log.Debug("Found Garlic connection, closing")
-		//g.Close()
+		// g.Close()
 		err := g.Close()
 		if err != nil {
 			log.WithError(err).Error("Error closing Garlic connection")
@@ -621,5 +622,5 @@ func DialGarlic(network, addr string) (net.Conn, error) {
 
 	log.Debug("Successfully established Garlic connection")
 	return conn, nil
-	//return g.Dial(network, addr)
+	// return g.Dial(network, addr)
 }

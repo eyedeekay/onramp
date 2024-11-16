@@ -1,10 +1,11 @@
 package onramp
 
 import (
-	"github.com/sirupsen/logrus"
 	"io"
 	"net"
 	"strings"
+
+	"github.com/sirupsen/logrus"
 )
 
 type OnrampProxy struct {

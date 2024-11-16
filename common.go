@@ -4,12 +4,13 @@
 package onramp
 
 import (
-	"github.com/sirupsen/logrus"
 	"net"
 	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/sirupsen/logrus"
 )
 
 //go:generate go run -tags gen ./gen.go
@@ -18,23 +19,23 @@ import (
 func GetJoinedWD(dir string) (string, error) {
 	wd, err := os.Getwd()
 	if err != nil {
-		log.WithError(err).Error("Failed to get working directory")
+		//log.WithError(err).Error("Failed to get working directory")
 		return "", err
 	}
 	jwd := filepath.Join(wd, dir)
 	ajwd, err := filepath.Abs(jwd)
 	if err != nil {
-		log.WithError(err).WithField("path", jwd).Error("Failed to get absolute path")
+		//log.WithError(err).WithField("path", jwd).Error("Failed to get absolute path")
 		return "", err
 	}
 	if _, err := os.Stat(ajwd); err != nil {
-		log.WithField("path", ajwd).Debug("Directory does not exist, creating")
+		//log.WithField("path", ajwd).Debug("Directory does not exist, creating")
 		if err := os.MkdirAll(ajwd, 0755); err != nil {
-			log.WithError(err).WithField("path", ajwd).Error("Failed to create directory")
+			//log.WithError(err).WithField("path", ajwd).Error("Failed to create directory")
 			return "", err
 		}
 	}
-	log.WithField("path", ajwd).Debug("Successfully got joined working directory")
+	//log.WithField("path", ajwd).Debug("Successfully got joined working directory")
 	return ajwd, nil
 }
 

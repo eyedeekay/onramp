@@ -24,7 +24,7 @@ func TestBareOnion(t *testing.T) {
 		t.Error(err)
 	}
 	log.Println("listener:", listener.Addr().String())
-	//defer listener.Close()
+	// defer listener.Close()
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello, %q", r.URL.Path)
 	})

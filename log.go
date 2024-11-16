@@ -1,11 +1,12 @@
 package onramp
 
 import (
-	"github.com/sirupsen/logrus"
 	"io"
 	"os"
 	"strings"
 	"sync"
+
+	"github.com/sirupsen/logrus"
 )
 
 var (

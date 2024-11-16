@@ -10,13 +10,14 @@ import (
 	"encoding/asn1"
 	"encoding/pem"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"math/big"
 	"net"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/cretz/bine/torutil"
 )
