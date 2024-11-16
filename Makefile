@@ -1,6 +1,6 @@
 
-USER_GH=eyedeekay
-VERSION=0.33.91
+USER_GH=go-i2p
+VERSION=0.33.92
 CREDIT='contributors to this release: @hkh4n, @eyedeekay'
 packagename=onramp
 
